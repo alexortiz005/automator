@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+
+use App\Reader;
+use App\Writer;
+use App\Precondicion;
+use App\Asercion;
 
 class uploadController extends Controller
 {
@@ -14,30 +20,23 @@ class uploadController extends Controller
 
 		if($request->hasFile('archivoWord')){
 
-
-
 			$file = $request->file('archivoWord');
-		    $wordFile = \PhpOffice\PhpWord\IOFactory::load($file,'ODText');		  
-		    $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($wordFile, 'HTML');
-			$objWriter->save('doc.html');
+			$reader= new Reader($file);
+			//$reader->dumpFile();
+			$precondiciones=$reader->extraerPrecondiciones();
+			$aserciones=$reader->extraerAserciones();
 
+			/*
+			echo "las precondiciones son: <br>";
+			dd($precondiciones);
 
+			echo "<br>";
 
-			
+			*/
 
-			foreach($wordFile->getSections() as $section) {
-			    foreach($section->getElements() as $element) {
-			        if(method_exists($element,'getText')) {
-			        	var_dump($element->getText());
-			        	var_dump($element->getElementId());
-			        	echo "<br>";
-			        	
-			        }
-			    }
-			    echo 'fin seccion <br>';
-			}
-
-			dd($wordFile);
+			echo "las aserciones son: <br>";
+			dd($aserciones);
+		
 		    
 
 		}else{
