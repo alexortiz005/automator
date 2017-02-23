@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Subir docx</title>
+	<title>bajar .xlsx</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -67,99 +67,35 @@
 <body>
 <div class="container">
 	<div class="jumbotron">
-		<center><h1>Carga de Escenarios</h1></center>
+		<center><h1>Descarga de Escenarios (xlsx)</h1></center>
 	</div>
 
 
 	<div class="col-md-6 col-md-offset-3">
 
 		<div class="panel panel-default">
-		  <div class="panel-heading">Subir Archivos</div>
+		  <div class="panel-heading">Descargar Archivo</div>
 		  <div class="panel-body">
-		  	<form id="upload" action="/subir" enctype="multipart/form-data" method="post">
 
-				{{csrf_field()}}		
-				
-				<input type="file"  name="file[]" accept=".docx" multiple>
-				<input type="submit">
+		  	@foreach($modulos as $index=>$modulo)
 
-				<script type="text/javascript">
-				
-					var form = document.getElementById('upload');
-					var request= new XMLHttpRequest();
+		  		<a href="{{ URL::to('/bajar',$modulo->id) }}" class="btn btn-default" role="button">{{$modulo->nombre}}</a>		  		
 
-					form.addEventListener('submit',function(e){
-						e.preventDefault();
-						var formdata = new FormData(form);
+		  		
 
-						request.open('post','/subir');
-						request.addEventListener("load",transferComplete);
-						request.send(formdata);
-
-					});
-
-					function transferComplete(data){
-
-						$("#errorAlert").html("<strong>Se han presentado los siguientes inconvenientes:</strong> <br>");
-
-						response= JSON.parse(data.currentTarget.response);
-					
-						if(response.errors.length>0){
-
-							response.errors.forEach( function(value, key){	
-
-								$("#errorAlert").append(value.message);
-								$("#errorAlert").append("<br>");
-							    
-							});		
-
-							$("#errorAlert").show();
-							$("#successAlert").hide();
-
-						}else{
-
-							
-
-							$("#errorAlert").hide();
-							$("#successAlert").show();
-
-						}
-					
-						if(response.success){							
-
-						}else{
-
-						}
-					}
-					
-				</script> 
-
-				<div class="row">
-					
-
-					<div  class="col-md-8 col-md-offset-2" id="botonesDescarga" hidden>
-						asdasd
-					</div> 
-				</div>
-			</form>
+		  	@endforeach
+		  
 		  </div>
 		</div>
-
-		<div class="alert alert-danger alert-dismissable" id="errorAlert" hidden>
-		  
-		</div>
-
-		<div class="alert alert-success alert-dismissable" id="successAlert" hidden>
-		  <strong>La carga se realizo sin inconvenientes</strong> <br>
-		</div>
-		
+	
 	</div>
 
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<div class="links">     
+
+			<div class="links">
 				<a href="{{ url('/') }}">Home</a> 
-		        <a href="{{ url('/download') }}">Descargar Escenarios</a>                    
+		        <a href="{{ url('/upload') }}">Cargar Escenarios</a>                       
 		    </div>
 			
 		</div>

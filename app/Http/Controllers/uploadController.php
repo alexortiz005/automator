@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Storage;
+
+use Response;
+
 use App\Reader;
-use App\Writer;
 use App\Precondicion;
 use App\Asercion;
+use App\Escenario;
+use App\Modulo;
 
 class uploadController extends Controller
 {
@@ -16,33 +21,57 @@ class uploadController extends Controller
 		return view('upload.upload');
 	}
 
-	public function subir(request $request){
+	public function subir(Request $request){
+	
+		$files=$request->file('file');
+		$errors=array();		
 
-		if($request->hasFile('archivoWord')){
+		if(!empty($files)){
 
-			$file = $request->file('archivoWord');
-			$reader= new Reader($file);
-			//$reader->dumpFile();
-			$precondiciones=$reader->extraerPrecondiciones();
-			$aserciones=$reader->extraerAserciones();
+			foreach ($files as $key => $file) {
+					
+				$reader= new Reader($file);
 
-			/*
-			echo "las precondiciones son: <br>";
-			dd($precondiciones);
+				try {					
+					$esc=$reader->extraerEscenario();
+					$precondiciones=$reader->extraerPrecondiciones();
+					$aserciones=$reader->extraerAserciones();
+					
+				} catch (\Exception $e) {
 
-			echo "<br>";
+					$errors[]=array("file"=>$file,"message"=>$e->getMessage());				
+					continue;
+					
+				}				
 
-			*/
+				$precondicionesAux=array();	
+				foreach ($precondiciones as $key => $precondicion) {
+						$precondicionesAux[]=$precondicion->doSingleton();					
+				}
 
-			echo "las aserciones son: <br>";
-			dd($aserciones);
-		
-		    
+				$asercionesAux=array();
+				foreach ($aserciones as $key => $asercion) {
+						$asercionesAux[]=$asercion->doSingleton();					
+				}		
+
+
+				$esc->attachPrecondiciones($precondicionesAux);
+				$esc->attachAserciones($asercionesAux);
+				
+			}		
+
+			$modulos=Modulo::All();		
+
+			return response()->json(array('success' => True,"errors"=>$errors,"modulos"=>$modulos));
 
 		}else{
-			return "No selecciono archivo alguno";
+
+			$errors[]=array("message"=>"No se selecciono ningun archivo");			
+			return response()->json(array('success' => False,"errors"=>$errors));
+
 		}
 		
 	}
+
     //
 }

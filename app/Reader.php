@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Exception;
+
 use Illuminate\Database\Eloquent\Model;
 use App\Precondicion;
 use App\Asercion;
+use App\Modulo;
 
 class Reader extends Model
 {
@@ -120,13 +123,61 @@ class Reader extends Model
 
 	}
 
+	public function extraerModulo(){
+
+		$originalName=$this->file->getClientOriginalName();
+
+		$explosion=explode("ESC", $originalName);
+
+		$modExplosion=explode("DISEÑO",$explosion[0]);
+
+		$modExplosionExplosion=explode("_",$modExplosion[1]);
+
+		$modExplosionExplosion = array_diff($modExplosionExplosion, array("CXP"));
+
+		$nombre=trim(implode(" ",$modExplosionExplosion));
+
+		$modulo= new Modulo();
+
+		$modulo->nombre=$nombre;
+
+		return $modulo->doSingleton();
+
+	}
+
+	public function extraerEscenario(){
+
+		$originalName=$this->file->getClientOriginalName();
+		$explosion=explode("ESC", $originalName);
+
+		
+		$numExplosion=explode("_", $explosion[1]);
+		
+		$numero= $numExplosion[1];
+
+		$escenario = new Escenario;
+
+		$modulo=$this->extraerModulo();
+
+        $escenario->numero = $numero;
+        $escenario->modulo = $modulo->nombre;
+
+
+        $escenario=$escenario->doSingleton();
+
+        return $escenario;
+	}
+
 
 	public function extraerPrecondiciones(){	
 
 		$precondiciones=array();
 
-		$tables=$this->getTables();    
+		$tables=$this->getTables();	 
 
+		if(sizeof($tables)<4)
+			throw new Exception("Error obteniendo tablas en el archivo ".$this->file->getClientOriginalName(), 1);
+			
 		$table=$tables[2];        
 
 		$rows=$table->getRows();
@@ -156,11 +207,11 @@ class Reader extends Model
 	    				if(method_exists($cellElement,'getText')) {
 
 		    				if($cellCount==0)
-		    					$precondicion->setVariable($cellElement->getText());
+		    					$precondicion->variable=$cellElement->getText();
 		    				if($cellCount==1)
-		    					$precondicion->setObjeto($cellElement->getText());
+		    					$precondicion->objeto=$cellElement->getText();
 		    				if($cellCount==2)
-		    					$precondicion->setRuta($cellElement->getText());
+		    					$precondicion->ruta=$cellElement->getText();
 				        	
 				        	
 				        }else{
@@ -174,8 +225,7 @@ class Reader extends Model
 					        		if(method_exists($innerCellElement,'getText')) {							        	
 
 							        	if($innerCellElement->getText()!=null){
-							        		$descripcion=$descripcion.$innerCellElement->getText();
-							        		$descripcion.="<br>";					        		
+							        		$descripcion=$descripcion.$innerCellElement->getText();	
 							        	
 							        	}
 							        	
@@ -190,7 +240,7 @@ class Reader extends Model
 				        
 	    			}
 
-	    			$precondicion->setDescripcion($descripcion);
+	    			$precondicion->descripcion=$descripcion;
 
 
 	    			$cellCount++;
@@ -210,7 +260,10 @@ class Reader extends Model
 
 		$aserciones=array();
 
-		$tables=$this->getTables();    
+		$tables=$this->getTables();  
+
+		if(sizeof($tables)<4)
+			throw new Exception("Error obteniendo tablas en el archivo ".$this->file->getClientOriginalName(), 1);  
 
 		$table=$tables[3];        
 
@@ -241,11 +294,11 @@ class Reader extends Model
 	    				if(method_exists($cellElement,'getText')) {
 
 		    				if($cellCount==0)
-		    					$asercion->setVariable($cellElement->getText());
+		    					$asercion->variable=$cellElement->getText();
 		    				if($cellCount==1)
-		    					$asercion->setObjeto($cellElement->getText());
+		    					$asercion->objeto=$cellElement->getText();
 		    				if($cellCount==2)
-		    					$asercion->setRuta($cellElement->getText());
+		    					$asercion->ruta=$cellElement->getText();
 				        	
 				        	
 				        }else{
@@ -259,8 +312,7 @@ class Reader extends Model
 					        		if(method_exists($innerCellElement,'getText')) {							        	
 
 							        	if($innerCellElement->getText()!=null){
-							        		$descripcion=$descripcion.$innerCellElement->getText();
-							        		$descripcion.="<br>";					        		
+							        		$descripcion=$descripcion.$innerCellElement->getText();				        		
 							        	
 							        	}
 							        	
@@ -275,7 +327,7 @@ class Reader extends Model
 				        
 	    			}
 
-	    			$asercion->setDescripcion($descripcion);
+	    			$asercion->descripcion=$descripcion;
 
 
 	    			$cellCount++;
@@ -290,6 +342,8 @@ class Reader extends Model
     	return $aserciones; 
 			   
 	}
+
+
 
 
 

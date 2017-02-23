@@ -7,54 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 class Precondicion extends Model
 {
 
-	protected $variable;
-	protected $objeto;
-	protected $ruta;
-	protected $descripcion;
+	protected $table = 'precondiciones';	
 
-	function __construct( $attributes = array())
-    {
-        parent::__construct($attributes);
 
-        $this->variable = "";
-        $this->objeto = "";
-        $this->ruta = "";
-        $this->descripcion = "";
+    public function escenarios(){
+
+		return $this->belongsToMany('App\Escenario', 'precondicion_escenario');
+
+	}    
+
+    public function doSingleton(){    
+
+
+        $precondicion=self::where('variable','=',$this->variable)->where('descripcion','=',$this->descripcion)->first();
+        
+        if(is_null($precondicion)){
+            
+            $this->save();  
+            return $this;       
+        }
+
+        return $precondicion;
 
     }
 
-    public function getVariable(){
-    	return $this->variable;
-    }
+    public function equals(Precondicion $precondicion){
+        
+        if($this->variable!=$precondicion->variable)
+            return false;
+        if($this->descripcion!=$precondicion->descripcion)
+            return false;
+        return true;
 
-    public function setVariable($variable){
-    	$this->variable=$variable;    	
     }
-
-    public function getObjeto(){
-    	return $this->objeto;
-    }
-
-    public function setObjeto($objeto){
-    	$this->objeto=$objeto;    	
-    }
-
-    public function getRuta(){
-    	return $this->ruta;
-    }
-
-    public function setRuta($ruta){
-    	$this->ruta=$ruta;    	
-    }
-
-    public function getDescripcion(){
-    	return $this->descripcion;
-    }
-
-    public function setDescripcion($descripcion){
-    	$this->descripcion=$descripcion;    	
-    }
-
 
     //
 }

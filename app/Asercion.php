@@ -7,53 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 class Asercion extends Model
 {
 
-	protected $variable;
-	protected $objeto;
-	protected $ruta;
-	protected $descripcion;
+	protected $table = 'aserciones';	
 
-	function __construct( $attributes = array())
-    {
-        parent::__construct($attributes);
+    public function escenarios(){
 
-        $this->variable = "";
-        $this->objeto = "";
-        $this->ruta = "";
-        $this->descripcion = "";
+		return $this->belongsToMany('App\Escenario', 'asercion_escenario');
+
+	}
+
+    public function doSingleton(){    
+
+
+        $asercion=self::where('variable','=',$this->variable)->where('descripcion','=',$this->descripcion)->first();
+        
+        if(is_null($asercion)){
+            
+            $this->save();  
+            return $this;       
+        }
+
+        return $asercion;
 
     }
-
-    public function getVariable(){
-    	return $this->variable;
-    }
-
-    public function setVariable($variable){
-    	$this->variable=$variable;    	
-    }
-
-    public function getObjeto(){
-    	return $this->objeto;
-    }
-
-    public function setObjeto($objeto){
-    	$this->objeto=$objeto;    	
-    }
-
-    public function getRuta(){
-    	return $this->ruta;
-    }
-
-    public function setRuta($ruta){
-    	$this->ruta=$ruta;    	
-    }
-
-    public function getDescripcion(){
-    	return $this->descripcion;
-    }
-
-    public function setDescripcion($descripcion){
-    	$this->descripcion=$descripcion;    	
-    }
-
+   
 }
 
