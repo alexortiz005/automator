@@ -83,8 +83,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{ url('/upload') }}">Cargar Escenarios</a>
-                    <a href="{{ url('/download') }}">Descargar Escenarios</a>                    
+                    <a href="{{ url('/upload') }}">Cargar Documentos Escenarios</a>
+                    <a href="{{ url('/modulos') }}">Modulos</a>                    
                 </div>
             </div>
         </div>

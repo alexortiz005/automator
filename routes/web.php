@@ -19,8 +19,12 @@ Route::get('upload','uploadController@vistaSubir');
 
 Route::get('download','downloadController@vistaBajar');
 
+Route::get('modulos','modulosController@vistaModulos');
+
+Route::get('ver/{moduloId}','modulosController@verModulo');
+
 Route::post('subir','uploadController@subir');
 
 Route::post('bajar','downloadController@bajar');
 
-Route::get('bajar/{moduloId}','downloadController@bajar');
+

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Modulo extends Model
 {
 	protected $table='modulos';
+    
 
 	public function escenarios(){
 		return $this->hasMany('App\Escenario', 'modulo','nombre');

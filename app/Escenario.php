@@ -64,6 +64,35 @@ class Escenario extends Model
         return $escenario;
 
     }
+
+    public function esMiPrecondicion($precondicion){    
+
+
+        $MisPrecondiciones=$this->precondiciones()->get();
+
+
+        foreach ($MisPrecondiciones as $key => $miPrecondicion) {
+        	if($miPrecondicion->equals($precondicion))
+        		return true;
+        }
+
+        return false;
+
+    }
+
+    public function esMiAsercion($asercion){    
+
+
+        $MisAserciones=$this->aserciones()->get();
+
+        foreach ($MisAserciones as $key => $miAsercion) {
+        	if($miAsercion->equals($asercion))
+        		return true;
+        }
+
+        return false;
+
+    }
 	
 
     //

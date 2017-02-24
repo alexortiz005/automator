@@ -29,6 +29,16 @@ class Asercion extends Model
         return $asercion;
 
     }
+
+    public function equals(Asercion $asercion){
+        
+        if($this->variable!=$asercion->variable)
+            return false;
+        if($this->descripcion!=$asercion->descripcion)
+            return false;
+        return true;
+
+    }
    
 }
 
