@@ -27,4 +27,6 @@ Route::post('subir','uploadController@subir');
 
 Route::post('bajar','downloadController@bajar');
 
+Route::post('eliminarModulo','modulosController@eliminar');
+
 

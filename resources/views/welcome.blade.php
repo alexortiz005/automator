@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Modulo de Automatizacion de Pruebas
+                    Automatización de Pruebas
                 </div>
 
                 <div class="links">

@@ -49,6 +49,7 @@ class Escenario extends Model
 		$old_aserciones->sync($idsAserciones);
 
 	}
+	
 
 	public function doSingleton(){    
 

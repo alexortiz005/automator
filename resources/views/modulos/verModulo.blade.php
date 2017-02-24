@@ -45,6 +45,59 @@
 	}
 
   </style>
+
+  <style>
+            html, body {
+                background-color: #fff;
+                color: #636b6f;
+                font-family: 'Raleway', sans-serif;
+                font-weight: 100;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .full-height {
+                height: 100vh;
+            }
+
+            .flex-center {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            .position-ref {
+                position: relative;
+            }
+
+            .top-right {
+                position: absolute;
+                right: 10px;
+                top: 18px;
+            }
+
+            .content {
+                text-align: center;
+            }
+
+            .title {
+                font-size: 84px;
+            }
+
+            .links > a {
+                color: #636b6f;
+                padding: 0 25px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+            .m-b-md {
+                margin-bottom: 30px;
+            }
+        </style>
 </head>
 <body>
 <div class="container">
@@ -59,8 +112,9 @@
 	<div class="container">	
 
 		<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#precondicionesTab">Precondiciones</a></li>
+			<li class="active"><a data-toggle="tab" href="#precondicionesTab">Precondiciones</a></li>
 			<li><a data-toggle="tab" href="#asercionesTab">Aserciones</a></li>
+			<li><a data-toggle="tab" href="#opcionesTab">Opciones</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -75,7 +129,7 @@
 				-->
 				<div class="table-responsive">
 
-					<table class="table table-bordered table-responsive header-fixed" >
+					<table class="table table-bordered table-responsive header-fixed table-hover" >
 						<thead>
 							<tr>
 
@@ -144,7 +198,7 @@
 
 				<div class="table-responsive">
 
-					<table class="table table-bordered table-responsive header-fixed" >
+					<table class="table table-bordered table-responsive header-fixed table-hover" >
 						<thead>
 							<tr>
 
@@ -197,8 +251,49 @@
 				FIN ASERCIONES
 
 				-->
-			</div>			
+			</div>		
+
+			<div id="opcionesTab" class="tab-pane fade">	
+				 <br>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-default">
+						  <div class="panel-heading">Configuración</div>
+						  <div class="panel-body">
+						  	
+						    <form action="/eliminarModulo" method="post">
+
+						    	{{csrf_field()}}
+						    	<input type="hidden" name="idModulo" value="{{$modulo->id}}">
+						    	<button type="submit" class="btn btn-info" > 
+						    		Eliminar Modulo
+						    		<span class="glyphicon glyphicon-trash"></span> 
+						    	</button>
+
+						    	
+						    </form>
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>	
 		</div>
+
+		<div class="row" style="margin: 10px">
+
+			<div class="col-md-6 col-md-offset-3">
+				<center>
+					<div class="links">     
+						<a href="{{ url('/') }}">Home</a> 
+				        <a href="{{ url('/modulos') }}">Modulos</a>       
+				        <a href="{{ url('/upload') }}">Cargar Documentos</a>             
+				    </div>
+					
+				</center>
+			
+			
+		</div>
+	</div>
 	</div>
 
 	 
