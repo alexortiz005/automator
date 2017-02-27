@@ -21,7 +21,7 @@ class Escenario extends Model
 
 	}
 
-	public function attachPrecondiciones($precondiciones){
+	public function sincronizarPrecondiciones($precondiciones){
 
 		$old_precondiciones=$this->precondiciones();
 
@@ -36,7 +36,7 @@ class Escenario extends Model
 
 	}
 
-	public function attachAserciones($aserciones){
+	public function sincronizarAserciones($aserciones){
 
 		$old_aserciones=$this->aserciones();
 

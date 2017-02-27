@@ -13,6 +13,18 @@ class Modulo extends Model
 		return $this->hasMany('App\Escenario', 'modulo','nombre');
 	}
 
+    public function aserciones(){
+
+        return $this->belongsToMany('App\Asercion', 'asercion_modulo');
+
+    }
+
+    public function precondiciones(){
+
+        return $this->belongsToMany('App\Precondicion', 'precondicion_modulo');
+
+    }
+
 
 	public function doSingleton(){    
 
@@ -29,7 +41,81 @@ class Modulo extends Model
 
     }
 
-    public function precondiciones(){
+    //borra el modulo y todas sus variables del sistema
+    public function purge(){
+
+        $escenarios=$this->escenarios()->get();
+        $precondiciones=$this->precondiciones()->get();
+        $aserciones=$this->aserciones()->get();
+
+        $this->precondiciones()->detach();
+        $this->aserciones()->detach();
+
+        foreach ($escenarios as $key => $escenario) {
+            $escenario->precondiciones()->detach();
+            $escenario->aserciones()->detach();
+            $escenario->delete();
+        }
+
+        foreach ($precondiciones as $key => $precondicion) {
+            try{
+                $precondicion->delete();
+            }catch(Exception $e){
+                continue;
+
+            }
+            
+        }
+
+        foreach ($aserciones as $key => $asercion) {
+            try{
+                $asercion->delete();
+            }catch(Exception $e){
+                continue;
+
+            }
+        }
+
+        $this->delete();
+    }
+
+    public function sincronizarPrecondiciones(){
+
+        $precondiciones=$this->precondicionesDeMisEscenarios();
+
+        $old_precondiciones=$this->precondiciones();
+
+        $idsPrecondiciones=array();
+
+        foreach ($precondiciones as $key => $precondicion) {
+            $idsPrecondiciones[]=$precondicion->id;
+        }
+
+        $old_precondiciones->sync($idsPrecondiciones);
+    
+
+    }
+
+    public function sincronizarAserciones(){
+
+        $aserciones=$this->asercionesDeMisEscenarios();
+
+        $old_aserciones=$this->aserciones();
+
+        $idsAserciones=array();
+
+        foreach ($aserciones as $key => $asercion) {
+            $idsAserciones[]=$asercion->id;
+        }
+
+        $old_aserciones->sync($idsAserciones);
+
+    }
+
+    
+    //FUNCIONES DEPRECADAS, PUES AHORA LA RELACION DEL MODULO CON LAS PRECONDICIONES ES DIRECTA
+
+    public function precondicionesDeMisEscenarios(){
 
         $escenarios=$this->escenarios()->get();       
         $precondiciones=array();
@@ -54,7 +140,7 @@ class Modulo extends Model
         return $precondiciones;
     }
 
-    public function aserciones(){
+    public function asercionesDeMisEscenarios(){
 
         $escenarios=$this->escenarios()->get();       
         $aserciones=array();
@@ -76,5 +162,5 @@ class Modulo extends Model
         }      
         return $aserciones;
     }
-    //
+    
 }

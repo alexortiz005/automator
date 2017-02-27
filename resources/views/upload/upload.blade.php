@@ -112,6 +112,7 @@
 					var form = document.getElementById('upload');
 					var request= new XMLHttpRequest();
 
+
 					form.addEventListener('submit',function(e){
 						$("#successAlert").hide();
 						$("#errorAlert").hide();
@@ -127,7 +128,7 @@
 					function transferComplete(data){
 
 						$("#errorAlert").html("<strong>Se han presentado los siguientes inconvenientes:</strong> <br>");
-
+						
 						response= JSON.parse(data.currentTarget.response);
 					
 						if(response.errors.length>0){

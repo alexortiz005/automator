@@ -15,6 +15,12 @@ class Asercion extends Model
 
 	}
 
+    public function modulos(){
+
+        return $this->belongsToMany('App\Modulo', 'asercion_modulo');
+
+    } 
+
     public function doSingleton(){    
 
 

@@ -55,12 +55,18 @@ class uploadController extends Controller
 				}		
 
 
-				$esc->attachPrecondiciones($precondicionesAux);
-				$esc->attachAserciones($asercionesAux);
+				$esc->sincronizarPrecondiciones($precondicionesAux);
+				$esc->sincronizarAserciones($asercionesAux);
 				
 			}		
 
-			$modulos=Modulo::All();		
+			$modulos=Modulo::All();	
+			foreach ($modulos as $key => $modulo) {
+					$modulo->sincronizarAserciones();
+					$modulo->sincronizarPrecondiciones();
+			}	
+
+			
 
 			return response()->json(array('success' => True,"errors"=>$errors,"modulos"=>$modulos));
 

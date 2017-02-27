@@ -16,6 +16,12 @@ class Precondicion extends Model
 
 	}    
 
+    public function modulos(){
+
+        return $this->belongsToMany('App\Modulo', 'precondicion_modulo');
+
+    } 
+
     public function doSingleton(){    
 
 
