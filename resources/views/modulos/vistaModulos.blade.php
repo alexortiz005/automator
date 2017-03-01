@@ -79,7 +79,7 @@
 
 		  	@foreach($modulos as $index=>$modulo)
 
-		  		<a href="{{ URL::to('/ver',$modulo->id) }}" class="btn btn-default" role="button">{{$modulo->nombre}}</a>		  		
+		  		<a href="{{ URL::to('/modulo',$modulo->id) }}" class="btn btn-default" role="button">{{$modulo->nombre}}</a>		  		
 
 		  		
 

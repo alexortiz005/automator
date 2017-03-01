@@ -129,7 +129,7 @@
 				-->
 				<div class="table-responsive">
 
-					<table class="table table-bordered table-responsive header-fixed table-hover" >
+					<table class="table table-bordered table-responsive header-fixed " >
 						<thead>
 							<tr>
 
@@ -145,13 +145,29 @@
 						</thead>
 						<tbody>
 							@foreach($precondiciones as $index=>$precondicion)
-								<tr>
+								@if($precondicion->estado=='sin_asignar')
+								<tr class="danger">								
+								@endif
+								@if($precondicion->estado=='sin_disenar')
+								<tr class="warning">								
+								@endif
+								@if($precondicion->estado=='disenada')
+								<tr class="success">								
+								@endif
+								@if($precondicion->estado=='testeada')
+								<tr>								
+								@endif
+
+							
 									<th scope="row">{{$index+1}}</th>
-									<td>{{$precondicion->objeto}}</td>
+									<td>
+										<a href="{{ URL::to('/precondicion',$precondicion->id) }}">{{$precondicion->objeto}}</a>
+										
+									</td>
 									<td>{{$precondicion->variable}}</td>
 									<td>
 										<div style="width: 150px; height: 100px; overflow: scroll">
-										 	{{$precondicion->descripcion}}
+										 	{{$precondicion->descripcion_formateada}}
 										</div>
 
 										
@@ -214,9 +230,22 @@
 						</thead>
 						<tbody>
 							@foreach($aserciones as $index=>$asercion)
-								<tr>
+								@if($asercion->estado=='sin_asignar')
+								<tr class="danger">								
+								@endif
+								@if($asercion->estado=='sin_disenar')
+								<tr class="warning">								
+								@endif
+								@if($asercion->estado=='disenada')
+								<tr class="success">								
+								@endif
+								@if($asercion->estado=='testeada')
+								<tr>								
+								@endif
 									<th scope="row">{{$index+1}}</th>
-									<td>{{$asercion->objeto}}</td>
+									<td>
+										<a href="{{ URL::to('/asercion',$asercion->id) }}">{{$asercion->objeto}}</a>
+									</td>
 									<td>{{$asercion->variable}}</td>
 									<td>
 										<div style="width: 150px; height: 100px; overflow: scroll">

@@ -15,18 +15,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Upload
+
 Route::get('upload','uploadController@vistaSubir');
-
-Route::get('download','downloadController@vistaBajar');
-
-Route::get('modulos','modulosController@vistaModulos');
-
-Route::get('ver/{moduloId}','modulosController@verModulo');
 
 Route::post('subir','uploadController@subir');
 
+//Download
+
+Route::get('download','downloadController@vistaBajar');
+
 Route::post('bajar','downloadController@bajar');
 
-Route::post('eliminarModulo','modulosController@eliminar');
+//Modulos
+
+Route::get('modulos','ModulosController@vistaModulos');
+
+Route::get('modulo/{moduloId}','ModulosController@verModulo');
+
+Route::post('eliminarModulo','ModulosController@eliminar');
+
+//Precondiciones
+
+Route::get('precondicion/{precondicionId}','PrecondicionController@verPrecondicion');
+
+Route::post('editarPrecondicion','PrecondicionController@editar');
+
+//Aserciones
+
+Route::get('asercion/{asercionId}','AsercionController@verAsercion');
+
+Route::post('editarAsercion','AsercionController@editar');
+
+
+
+
+
 
 

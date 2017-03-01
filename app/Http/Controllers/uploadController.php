@@ -33,16 +33,23 @@ class uploadController extends Controller
 				$reader= new Reader($file);
 
 				try {					
+
 					$esc=$reader->extraerEscenario();
-					$precondiciones=$reader->extraerPrecondiciones();
+
+					$precondiciones=$reader->extraerPrecondiciones();						
+
 					$aserciones=$reader->extraerAserciones();
+
+
 					
 				} catch (\Exception $e) {
 
 					$errors[]=array("file"=>$file,"message"=>$e->getMessage());				
 					continue;
 					
-				}				
+				}
+
+
 
 				$precondicionesAux=array();	
 				foreach ($precondiciones as $key => $precondicion) {

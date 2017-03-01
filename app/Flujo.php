@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Funcion extends Model
+class Flujo extends Model
 {
-	protected $table = 'funciones';
     //
 }

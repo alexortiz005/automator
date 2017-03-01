@@ -169,7 +169,8 @@ class Reader extends Model
 	}
 
 
-	public function extraerPrecondiciones(){	
+	public function extraerPrecondiciones(){
+
 
 		$precondiciones=array();
 
@@ -196,7 +197,8 @@ class Reader extends Model
 
 	    		foreach ($cells as $cellIndex => $cell) {
 
-	    			$descripcion="";	    			
+	    			$descripcion="";
+	    			$descripcion_formateada="";	    			
 
 	    			$cellElements=$cell->getElements();	    			
 
@@ -225,7 +227,10 @@ class Reader extends Model
 					        		if(method_exists($innerCellElement,'getText')) {							        	
 
 							        	if($innerCellElement->getText()!=null){
-							        		$descripcion=$descripcion.$innerCellElement->getText();	
+						    	    		$descripcion=$descripcion.$innerCellElement->getText();
+							        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
+							        		$descripcion_formateada	=$descripcion_formateada."\n";
+
 							        	
 							        	}
 							        	
@@ -238,19 +243,23 @@ class Reader extends Model
 				        }
 
 				        
-	    			}
+	    			}	    			
 
 	    			$precondicion->descripcion=$descripcion;
+	    			$precondicion->descripcion_formateada=$descripcion_formateada;
 
 
 	    			$cellCount++;
 	    		}
 
-	    		$precondiciones[]=$precondicion;
+	    		if($precondicion->descripcion!="")
+	    			$precondiciones[]=$precondicion;
     		}
 
     		$rowCount++;
-    	}
+    	}    	
+
+    	
 
     	return $precondiciones; 
 			   
@@ -283,13 +292,17 @@ class Reader extends Model
 
 	    		foreach ($cells as $cellIndex => $cell) {
 
-	    			$descripcion="";	    			
+	    			$descripcion="";
+	    			$descripcion_formateada="";	  
 
-	    			$cellElements=$cell->getElements();	    			
+
+	    			$cellElements=$cell->getElements();	  
+
+
 
 	    			foreach ($cellElements as $cellElementIndex => $cellElement) {
 
-	    				
+	    					
 
 	    				if(method_exists($cellElement,'getText')) {
 
@@ -312,7 +325,11 @@ class Reader extends Model
 					        		if(method_exists($innerCellElement,'getText')) {							        	
 
 							        	if($innerCellElement->getText()!=null){
-							        		$descripcion=$descripcion.$innerCellElement->getText();				        		
+
+							        		$descripcion=$descripcion.$innerCellElement->getText();
+							        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
+							        		$descripcion_formateada	=$descripcion_formateada."\n";
+
 							        	
 							        	}
 							        	
@@ -327,13 +344,17 @@ class Reader extends Model
 				        
 	    			}
 
+
+
 	    			$asercion->descripcion=$descripcion;
+	    			$asercion->descripcion_formateada=$descripcion_formateada;
 
 
 	    			$cellCount++;
 	    		}
 
-	    		$aserciones[]=$asercion;
+	    		if($asercion->descripcion!="")
+	    			$aserciones[]=$asercion;
     		}
 
     		$rowCount++;
