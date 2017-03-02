@@ -47,6 +47,12 @@ Route::get('asercion/{asercionId}','AsercionController@verAsercion');
 
 Route::post('editarAsercion','AsercionController@editar');
 
+//Keywords
+
+Route::post('vistaCrearKeyword','KeywordController@vistaCrearKeyword');
+Route::post('crearKeyword','KeywordController@crearKeyword');
+Route::get('desasociarKeyword/{tipo}/{idKeyword}/{idPrecondicion}', 'KeywordController@desasociar');
+
 
 
 

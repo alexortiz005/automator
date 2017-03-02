@@ -29,6 +29,12 @@ class Asercion extends Model
 
     }
 
+     public function keywords(){
+
+        return $this->belongsToMany('App\Keyword', 'asercion_keyword');
+
+    }
+
     public function doSingleton(){    
 
 
@@ -68,6 +74,36 @@ class Asercion extends Model
 
     public static function estados(){
         return self::$estados;
+
+    }
+
+    public function maxNumeroArgumentos(){
+
+        $keywords=$this->keywords()->get();       
+        $max=0;
+
+        foreach ($keywords as $key => $keyword) {
+            if(sizeof($keyword->argumentos()->get())>$max)         
+                $max=sizeof($keyword->argumentos()->get());
+        }
+
+        return $max;
+    }
+
+    public function purge(){
+
+        $keywords=$this->keywords()->get();
+        $this->keywords()->detach();
+
+        foreach ($keywords as $key => $keyword) {
+            $precondiciones=$keyword->precondiciones()->get();
+            $aserciones=$keyword->aserciones()->get();
+            if(sizeof($precondiciones)==0&&sizeof($aserciones))
+                $keyword->purge();            
+        }
+
+        $this->delete();
+
 
     }
    

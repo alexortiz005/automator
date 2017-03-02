@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Precondicion;
+use App\Modulo;
+use App\Argumento;
+
 
 use Illuminate\Http\Request;
 
@@ -12,12 +15,15 @@ class PrecondicionController extends Controller
 	public function verPrecondicion($precondicionId){
 
 		$precondicion=Precondicion::find($precondicionId);
-		$estados=Precondicion::estados();		
+		$estados=Precondicion::estados();	
+		$keywords=$precondicion->keywords()->get();	
+		$maxNumeroArgumentos=$precondicion->maxNumeroArgumentos();
+		$modulos=Modulo::All();
 
 		if($precondicion==null)
 			return redirect('/modulos');	
 		
-		return view('precondiciones.verPrecondicion',['precondicion'=>$precondicion],['estados'=>$estados]);
+		return view('precondiciones.verPrecondicion',['precondicion'=>$precondicion,'estados'=>$estados,'keywords'=>$keywords,'modulos'=>$modulos,'maxNumeroArgumentos'=>$maxNumeroArgumentos]);
 	}
 
 	public function editar(Request $request){

@@ -59,7 +59,7 @@ class Modulo extends Model
 
         foreach ($precondiciones as $key => $precondicion) {
             try{
-                $precondicion->delete();
+                $precondicion->purge();
             }catch(Exception $e){
                 continue;
 
@@ -69,7 +69,7 @@ class Modulo extends Model
 
         foreach ($aserciones as $key => $asercion) {
             try{
-                $asercion->delete();
+                $asercion->purge();
             }catch(Exception $e){
                 continue;
 

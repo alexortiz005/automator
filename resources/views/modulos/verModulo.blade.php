@@ -134,6 +134,7 @@
 							<tr>
 
 								<th><i>N</i></th>
+								<th>Keywords</th>
 								<th>Funcionalidad</th>
 								<th>Variable</th>
 								<th>Descripción</th>
@@ -161,9 +162,17 @@
 							
 									<th scope="row">{{$index+1}}</th>
 									<td>
-										<a href="{{ URL::to('/precondicion',$precondicion->id) }}">{{$precondicion->objeto}}</a>
+										
+										@foreach($precondicion->keywords()->get() as $indexKeyword=>$keyword)
+										<a href="{{url('/keyword',$keyword->id)}}">{{$keyword->nombre}} </a> <br>
+										@endforeach
 										
 									</td>
+
+									<td>
+										<a href="{{ URL::to('/precondicion',$precondicion->id) }}">{{$precondicion->objeto}}</a>
+									</td>
+
 									<td>{{$precondicion->variable}}</td>
 									<td>
 										<div style="width: 150px; height: 100px; overflow: scroll">
@@ -219,6 +228,7 @@
 							<tr>
 
 								<th><i>N</i></th>
+								<th>Keywords</th>
 								<th>Funcionalidad</th>
 								<th>Variable</th>
 								<th>Descripción</th>
@@ -244,12 +254,19 @@
 								@endif
 									<th scope="row">{{$index+1}}</th>
 									<td>
+										
+										@foreach($asercion->keywords()->get() as $indexKeyword=>$keyword)
+										<a href="{{url('/keyword',$keyword->id)}}">{{$keyword->nombre}} </a> <br>
+										@endforeach
+										
+									</td>
+									<td>
 										<a href="{{ URL::to('/asercion',$asercion->id) }}">{{$asercion->objeto}}</a>
 									</td>
 									<td>{{$asercion->variable}}</td>
 									<td>
 										<div style="width: 150px; height: 100px; overflow: scroll">
-										 	{{$asercion->descripcion}}
+										 	{{$asercion->descripcion_formateada}}
 										</div>
 
 										

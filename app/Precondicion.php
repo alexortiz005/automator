@@ -73,5 +73,35 @@ class Precondicion extends Model
 
     }
 
+    public function maxNumeroArgumentos(){
+
+        $keywords=$this->keywords()->get();       
+        $max=0;
+
+        foreach ($keywords as $key => $keyword) {
+            if(sizeof($keyword->argumentos()->get())>$max)         
+                $max=sizeof($keyword->argumentos()->get());
+        }
+
+        return $max;
+    }
+
+    public function purge(){
+
+        $keywords=$this->keywords()->get();
+        $this->keywords()->detach();
+
+        foreach ($keywords as $key => $keyword) {
+            $precondiciones=$keyword->precondiciones()->get();
+            $aserciones=$keyword->aserciones()->get();
+            if(sizeof($precondiciones)==0&&sizeof($aserciones)==0)
+                $keyword->purge();            
+        }
+
+        $this->delete();
+
+
+    }
+
     //
 }
