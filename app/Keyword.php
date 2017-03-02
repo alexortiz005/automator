@@ -28,18 +28,27 @@ class Keyword extends Model
 
 	public function asociarArgumentosPorNombre($nombres_argumentos){
 
+		$nombres_argumentos=array_unique($nombres_argumentos);
+
+		$argumentos_aux=[];
+
 		foreach ($nombres_argumentos as $key => $nombre_argumento) {
 
 			$argumento= new Argumento;
 			$argumento->nombre=$nombre_argumento;
-			$argumento=$argumento->doSingleton();
-
-			$argumento->keywords()->sync([$this->id],false);
-			
-			
+			$argumento=$argumento->doSingleton();	
+			$argumentos_aux[]=$argumento->id;
 
 		}
 
+		$this->argumentos()->sync($argumentos_aux);
+
+	}
+
+	public function actualizar($input){
+		$this->nombre=$input['nombre'];
+		$this->source=$input['source'];
+		$this->save();
 	}
 
 	public function purge(){

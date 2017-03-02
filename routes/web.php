@@ -50,8 +50,10 @@ Route::post('editarAsercion','AsercionController@editar');
 //Keywords
 
 Route::post('vistaCrearKeyword','KeywordController@vistaCrearKeyword');
+Route::post('editarKeyword','KeywordController@editarKeyword');
 Route::post('crearKeyword','KeywordController@crearKeyword');
 Route::get('desasociarKeyword/{tipo}/{idKeyword}/{idPrecondicion}', 'KeywordController@desasociar');
+Route::get('keyword/{idKeyword}', 'KeywordController@verKeyword');
 
 
 

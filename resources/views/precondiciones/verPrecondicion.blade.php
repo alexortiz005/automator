@@ -117,11 +117,11 @@
 							{{csrf_field()}}
 							<input type="hidden" name="id" value="{{$precondicion->id}}">
 
-							<label class="control-label col-sm-3 " for="estado">Id</label>
+							<label class="control-label col-sm-3 " for="estado">Id en BD</label>
 							
 							<div class="input-group"> 
 								<span class="input-group-addon" id="basic-addon1">#</span>
-								<input class="form-control" placeholder="Id" aria-describedby="basic-addon1" value="{{$precondicion->id}}" disabled> 
+								<input class="form-control" name="id" placeholder="Id" aria-describedby="basic-addon1" value="{{$precondicion->id}}" disabled> 
 							</div> <br> 
 
 							<label class="control-label col-sm-3 " for="estado">Variable</label>

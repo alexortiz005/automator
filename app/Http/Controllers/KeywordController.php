@@ -119,5 +119,30 @@ class KeywordController extends Controller
 
 	}
 
+	public function verKeyword($idKeyword){
+
+		$keyword=Keyword::find($idKeyword);
+		$modulos=Modulo::All();
+		$argumentosKeyword=$keyword->argumentos()->get();
+		
+		return view('keywords.verKeyword',['keyword'=>$keyword,'modulos'=>$modulos,'argumentosKeyword'=>$argumentosKeyword]);
+	}
+
+
+	public function editarKeyword(Request $request){
+
+
+		$input=$request->all();	
+
+		$keyword=Keyword::find($input['id']);
+		$nombres_argumentos=Argumento::entregarNombres($input['argumentos']);
+
+		$keyword->actualizar($input);
+		$keyword->asociarArgumentosPorNombre($nombres_argumentos);
+
+		return redirect('/keyword/'.$keyword->id);
+
+	}
+
     //
 }
