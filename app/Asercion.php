@@ -115,6 +115,25 @@ class Asercion extends Model
 
 
     }
+
+    public function merge(Asercion $asercion_to_merge){
+
+        $escenarios_asercion_to_merge=$asercion_to_merge->escenarios;
+
+        $ids=[];      
+
+        foreach ($escenarios_asercion_to_merge as $key => $escenario) {   
+            $ids[]=$escenario->id;
+        }
+
+        $this->escenarios()->syncWithoutDetaching($ids);
+
+        $asercion_to_merge->escenarios()->detach(); 
+
+        $asercion_to_merge->purge();
+
+
+    }
    
 }
 

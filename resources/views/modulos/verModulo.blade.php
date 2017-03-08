@@ -9,6 +9,56 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+
+  	$(function() {
+
+
+		$('input.precondicion-checkbox').on('change', function(evt) {
+
+			var checkboxes=$('input.precondicion-checkbox:checked');	
+
+			if(checkboxes.length>2){
+				this.checked = false;
+			}else{
+				var valor= new Array();
+				checkboxes.each(function( index ) {
+				  valor.push((this).value);
+				});
+				console.log(valor);
+				$('#precondicionesToMerge').val(valor);
+			}
+							  
+		});
+
+		
+		$('input.asercion-checkbox').on('change', function(evt) {
+
+			var checkboxes=$('input.asercion-checkbox:checked');	
+
+			if(checkboxes.length>2){
+				this.checked = false;
+			}else{
+				var valor= new Array();
+				checkboxes.each(function( index ) {
+				  valor.push((this).value);
+				});
+				console.log(valor);
+				$('#asercionesToMerge').val(valor);
+			}
+							  
+		});
+
+	   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		    var target = $(e.target).attr("href");
+		    sessionStorage.setItem("lastTabModulos", target);
+		});
+
+	   $('.nav-tabs a[href="'+sessionStorage.lastTabModulos+'"]').tab('show')
+
+	});
+  	
+  </script>
 
   <style type="text/css">
   	
@@ -121,6 +171,9 @@
 		<div class="tab-content">
 			<div id="precondicionesTab" class="tab-pane fade in active">
 				<br>
+				<form method="post" action="/mergePrecondiciones" id="formMergePrecondiciones">
+				{{csrf_field()}}
+				<input type="hidden" id="precondicionesToMerge" name="precondicionesToMerge" value="123">
 			
 					
 				<!-- 
@@ -166,7 +219,11 @@
 								@endif
 
 							
-									<th scope="row">{{$index+1}}</th>
+									<th scope="row">
+										<div class="checkbox">
+										  <label><input class="precondicion-checkbox" type="checkbox" value="{{$precondicion->id}}"><b>{{$index+1}}</b></label>
+										</div>									
+									</th>
 									<td>
 										
 										@foreach($precondicion->keywords()->get() as $indexKeyword=>$keyword)
@@ -181,9 +238,7 @@
 
 									<td>{{$precondicion->variable}}</td>
 									<td>
-										<div style="width: 250px; height: 150px; overflow: scroll">
-										 	{{$precondicion->descripcion_formateada}}
-										</div>
+										<pre style="width: 250px; height: 150px; overflow-x: scroll; word-wrap: break-word;">{{trim($precondicion->descripcion_formateada)}}</pre>
 
 										
 									</td>
@@ -204,7 +259,38 @@
 						</tbody>
 					</table>
 
+
+
 				</div>
+
+				<center>
+					<button type="submit" class="btn btn-info btn-lg " style="margin: 10px" id="botonMergePrecondiciones"> 
+	                  Merge Precondiciones
+	                  <span class="glyphicon glyphicon-random"></span> 
+	                </button>
+	                <div class="clearfix"></div>	                
+					
+				</center>
+
+				<script type="text/javascript">
+		    		$( "#botonMergePrecondiciones" ).click(function( event ) {
+					  event.preventDefault();
+					  if(confirm('Esta accion no se puede deshacer¿Esta seguro de que desea proseguir?'))
+					  	$('#formMergePrecondiciones').submit();
+					 
+					  
+					  
+					});
+		    		
+		    	</script>
+
+				
+
+
+
+
+
+				</form>
 
 				<!--
 
@@ -219,7 +305,11 @@
 			</div>
 
 			<div id="asercionesTab" class="tab-pane fade">	
-				<br>		
+				<br>	
+
+				<form method="post" action="/mergeAserciones" id="formMergeAserciones">
+				{{csrf_field()}}
+				<input type="hidden" id="asercionesToMerge" name="asercionesToMerge" value="123">	
 
 				<!-- 
 
@@ -229,7 +319,7 @@
 
 				<div class="table-responsive">
 
-					<table class="table table-bordered table-responsive header-fixed table-hover" >
+					<table class="table table-bordered table-responsive header-fixed" >
 						<thead>
 							<tr>
 
@@ -264,7 +354,11 @@
 								@if($asercion->estado=='testeada')
 								<tr>								
 								@endif
-									<th scope="row">{{$index+1}}</th>
+									<td scope="row">
+										<div class="checkbox">
+										  <label><input class="asercion-checkbox" type="checkbox" value="{{$asercion->id}}"><b>{{$index+1}}</b></label>
+										</div>									
+									</td>
 									<td>
 										
 										@foreach($asercion->keywords()->get() as $indexKeyword=>$keyword)
@@ -277,9 +371,7 @@
 									</td>
 									<td>{{$asercion->variable}}</td>
 									<td>
-										<div style="width: 150px; height: 100px; overflow: scroll">
-										 	{{$asercion->descripcion_formateada}}
-										</div>
+										<pre style="width: 250px; height: 150px; overflow-x: scroll">{{$asercion->descripcion_formateada}}</pre>
 
 										
 									</td>
@@ -302,6 +394,29 @@
 
 				</div>
 
+				<center>
+					<button type="submit" class="btn btn-info btn-lg " style="margin: 10px" id="botonMergeAserciones" > 
+	                  Merge Aserciones
+	                  <span class="glyphicon glyphicon-random"></span> 
+	                </button>
+	                <div class="clearfix"></div>
+					
+				</center>
+
+				<script type="text/javascript">
+		    		$( "#botonMergeAserciones" ).click(function( event ) {
+					  event.preventDefault();
+					  if(confirm('Esta accion no se puede deshacer¿Esta seguro de que desea proseguir?'))
+					  	$('#formMergeAserciones').submit();
+					 
+					  
+					  
+					});
+		    		
+		    	</script>
+
+				</form>
+
 				
 
 				  <!-- 
@@ -309,6 +424,71 @@
 				FIN ASERCIONES
 
 				-->
+			</div>	
+
+			<div id="flujosTab" class="tab-pane fade">
+			<br>
+		
+
+				<ul class="list-group">	
+					@foreach($escenarios as $escenario)
+					<li class="list-group-item"> 
+						<div class="">
+							<div class="row">
+								<div class="col-md-2">
+									<h2>Escenario {{$escenario->numero}}</h2>									
+								</div>
+								<form method="post" action="/editarFlujo">
+									{{csrf_field()}}
+									<div class="col-md-9">
+
+										<input type="hidden" name="escenario_id" value="{{$escenario->id}}">					
+
+										<label class="control-label " for="estado">Flujo Crudo</label>
+
+										<div class="input-group"> 
+											<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-align-left"></span></span>
+											<textarea rows="5" class="form-control"  name="flujo_crudo" placeholder="Flujo Crudo" aria-describedby="basic-addon1" >{{is_null($escenario->flujo)?"":$escenario->flujo->flujo_crudo}}</textarea>
+											
+										</div> <br> 
+
+										<label class="control-label " for="estado">Flujo Procesado</label>
+
+										<div class="input-group"> 
+											<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-indent-left"></span></span>
+											<textarea rows="5" class="form-control"  name="flujo_procesado" placeholder="Flujo Procesado" aria-describedby="basic-addon1" >{{is_null($escenario->flujo)?"":$escenario->flujo->flujo_procesado}}</textarea>
+											
+										</div> <br> 
+
+										<label class="control-label " for="estado">Dataset</label>
+
+										<div class="input-group"> 
+											<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-usd"></span></span>
+											<textarea rows="5" class="form-control"  name="dataset" placeholder="Dataset" aria-describedby="basic-addon1"  >{{is_null($escenario->flujo)?"":$escenario->flujo->dataset}}</textarea>
+											
+										</div> <br> 
+
+										<button type="submit" class="btn btn-success pull-right" name="guardar" style="display: none"> 
+						                  Guardar
+						                  <span class="glyphicon glyphicon-floppy-disk"></span> 
+						                </button>
+
+						                <button type="submit" class="btn btn-info pull-right" name="actualizar" style="margin-right: 10px"> 
+						                  Actualizar
+						                  <span class="glyphicon glyphicon-refresh"></span> 
+						                </button>
+
+									</div>
+									
+										
+								</form>
+								
+							</div>
+						</div>
+					</li>
+					@endforeach		 
+				</ul>
+				
 			</div>		
 
 			<div id="opcionesTab" class="tab-pane fade">	
@@ -347,11 +527,9 @@
 				</div>
 			</div>
 
-			<div id="flujosTab" class="tab-pane fade">
+		
 
-				hola hola 
-				
-			</div>	
+
 
 
 		</div>

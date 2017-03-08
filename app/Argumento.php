@@ -23,6 +23,12 @@ class Argumento extends Model
 
     }
 
+    public function flujos(){
+
+        return $this->belongsToMany('App\Flujo', 'flujo_argumento');
+
+    }
+
 	public function doSingleton(){    
 
 
@@ -63,7 +69,7 @@ class Argumento extends Model
 
     public function tryDelete(){
  
-        if(sizeof($this->tests)==0&&sizeof($this->keywords)==0){
+        if(sizeof($this->tests)==0&&sizeof($this->keywords)==0&&sizeof($this->flujos)==0){
               $this->delete();
               return true;
         }      

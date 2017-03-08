@@ -112,5 +112,41 @@ class Precondicion extends Model
 
     }
 
+    public function merge(Precondicion $precondicion_to_merge){
+
+
+        $escenarios_precondicion_to_merge=$precondicion_to_merge->escenarios;
+
+        $ids=[];   
+        $ids2=[];     
+
+        foreach ($escenarios_precondicion_to_merge as $key => $escenario) {   
+            $ids[]=$escenario->id;
+        }
+
+        foreach ($this->escenarios as $key => $escenario) {   
+            $ids2[]=$escenario->id;
+        }
+
+        print("ids es ");
+        var_dump($ids);
+        print("<br>");
+        print("ids2 es ");
+        var_dump($ids2);
+        print("<br>");
+
+
+
+        var_dump($this->escenarios()->select(['escenarios.id'])->get()->toArray());
+        $this->escenarios()->syncWithoutDetaching($ids);
+        var_dump($this->escenarios()->select(['escenarios.id'])->get()->toArray());
+
+        $precondicion_to_merge->escenarios()->detach(); 
+
+        $precondicion_to_merge->purge();
+
+
+    }
+
     //
 }

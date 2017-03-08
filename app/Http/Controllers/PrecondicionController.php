@@ -47,5 +47,34 @@ class PrecondicionController extends Controller
 		
 		return redirect()->back();
 	}
+
+	public function merge(Request $request){
+
+		$input=$request->all();
+
+		$idsPrecondiciones=explode(',', $input['precondicionesToMerge']);
+
+		$precondiciones=[];
+
+		foreach ($idsPrecondiciones as $key => $idPrecondicion) {
+			$precondiciones[]=Precondicion::find($idPrecondicion);
+		}
+
+		$precondicion_base=$precondiciones[0];
+		$precondicion_to_merge=$precondiciones[1];
+
+		if(strlen($precondicion_base->descripcion)<strlen($precondicion_to_merge->descripcion)){
+			$tmp=$precondicion_base;
+			$precondicion_base=$precondicion_to_merge;
+			$precondicion_to_merge=$tmp;
+		}
+
+		
+
+		$precondicion_base->merge($precondicion_to_merge);
+
+		return redirect()->back();
+
+	}
     //
 }

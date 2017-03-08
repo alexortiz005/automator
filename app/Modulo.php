@@ -45,8 +45,8 @@ class Modulo extends Model
     public function purge(){
 
         $escenarios=$this->escenarios;
-        $precondiciones=$this->precondiciones;
-        $aserciones=$this->aserciones;   
+        $this->precondiciones()->detach();
+        $this->aserciones()->detach();   
         
         foreach ($escenarios as $key => $escenario) {
             $escenario->purge();

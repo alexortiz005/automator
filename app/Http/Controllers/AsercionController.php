@@ -45,5 +45,40 @@ class AsercionController extends Controller
 		
 		return redirect()->back();
 	}
+
+	public function merge(Request $request){
+
+		$input=$request->all();
+
+		$idsAserciones=explode(',', $input['asercionesToMerge']);
+
+		$aserciones=[];
+
+		foreach ($idsAserciones as $key => $idAsercion) {
+			$aserciones[]=Asercion::find($idAsercion);
+		}
+
+		$asercion_base=$aserciones[0];
+		$asercion_to_merge=$aserciones[0];
+
+		foreach ($aserciones as $key => $asercion) {
+
+			if(strlen($asercion->descripcion)>=strlen($asercion_base->descripcion))
+				$asercion_base=$asercion;
+		
+		}
+
+		foreach ($aserciones as $key => $asercion) {
+
+			if(strlen($asercion->descripcion)<=strlen($asercion_to_merge->descripcion))
+				$asercion_to_merge=$asercion;
+		
+		}
+
+		$asercion_base->merge($asercion_to_merge);
+
+		return redirect()->back();
+
+	}
     //
 }

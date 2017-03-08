@@ -41,11 +41,19 @@ Route::get('precondicion/{precondicionId}','PrecondicionController@verPrecondici
 
 Route::post('editarPrecondicion','PrecondicionController@editar');
 
+Route::post('mergePrecondiciones','PrecondicionController@merge');
+
 //Aserciones
 
 Route::get('asercion/{asercionId}','AsercionController@verAsercion');
 
 Route::post('editarAsercion','AsercionController@editar');
+
+Route::post('mergeAserciones','AsercionController@merge');
+
+//Flujos
+
+Route::post('editarFlujo','FlujosController@editar');
 
 //Keywords
 
@@ -64,6 +72,8 @@ Route::get('escenario/{idEscenario}', 'EscenarioController@verEscenario');
 //Tests
 
 Route::post('editarTests','TestsController@editarTests');
+
+
 
 
 
