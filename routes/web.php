@@ -50,11 +50,20 @@ Route::post('editarAsercion','AsercionController@editar');
 //Keywords
 
 Route::post('vistaCrearKeyword','KeywordController@vistaCrearKeyword');
+Route::post('validarNombreKeyword','KeywordController@validarNombreKeyword');
 Route::post('editarKeyword','KeywordController@editarKeyword');
 Route::post('crearKeyword','KeywordController@crearKeyword');
+Route::post('asociarOtrosKeywords','KeywordController@asociarOtrosKeywords');
 Route::get('desasociarKeyword/{tipo}/{idKeyword}/{idPrecondicion}', 'KeywordController@desasociar');
 Route::get('keyword/{idKeyword}', 'KeywordController@verKeyword');
 
+//Escenarios
+
+Route::get('escenario/{idEscenario}', 'EscenarioController@verEscenario');
+
+//Tests
+
+Route::post('editarTests','TestsController@editarTests');
 
 
 

@@ -21,9 +21,16 @@ class Escenario extends Model
 
 	}
 
-	public function sincronizarPrecondiciones($precondiciones){
+	public function modulo(){
+		return $this->BelongsTo('App\Modulo', 'modulo','nombre');
+	}
 
-		$old_precondiciones=$this->precondiciones();
+    public function flujo()
+    {
+        return $this->hasOne('App\Flujo');
+    }
+
+	public function sincronizarPrecondiciones($precondiciones){		
 
 		$idsPrecondiciones=array();
 
@@ -31,14 +38,18 @@ class Escenario extends Model
 			$idsPrecondiciones[]=$precondicion->id;
 		}
 
-		$old_precondiciones->sync($idsPrecondiciones);
+        $old_precondiciones=$this->precondiciones;
+
+		$this->precondiciones()->sync($idsPrecondiciones);
+
+        foreach ($old_precondiciones as $key => $precondicion) {
+            $precondicion->tryDelete();
+        }
 	
 
 	}
 
-	public function sincronizarAserciones($aserciones){
-
-		$old_aserciones=$this->aserciones();
+	public function sincronizarAserciones($aserciones){		
 
 		$idsAserciones=array();
 
@@ -46,7 +57,13 @@ class Escenario extends Model
 			$idsAserciones[]=$asercion->id;
 		}
 
-		$old_aserciones->sync($idsAserciones);
+        $old_aserciones=$this->aserciones;
+
+		$this->aserciones()->sync($idsAserciones);
+
+        foreach ($old_aserciones as $key => $asercion) {
+            $asercion->tryDelete();
+        }
 
 	}
 	
@@ -92,6 +109,28 @@ class Escenario extends Model
         }
 
         return false;
+
+    }
+
+    public function purge(){
+
+    	$precondiciones=$this->precondiciones;
+    	$aserciones=$this->aserciones;
+
+    	$this->precondiciones()->detach();
+    	$this->aserciones()->detach();
+
+    	foreach ($precondiciones as $key => $precondicion) {
+    		$precondicion->tryDelete();
+    	}
+
+    	foreach ($aserciones as $key => $asercion) {
+    		$asercion->tryDelete();
+    	}
+
+
+    	$this->delete();
+
 
     }
 	

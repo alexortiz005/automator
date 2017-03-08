@@ -98,16 +98,23 @@
       <div class="jumbotron">
       	<center>
       		
-        <h1 class="display-3"> CREAR KEYWORD</h1>       
+        <h1 class="display-3"> CREAR KEYWORD</h1> 
+        @if(isset($precondicion))
+        <h2>para precondición {{$precondicion->variable}}</h2>
+        @endif      
+
+        @if(isset($asercion))
+        <h2>para aserción {{$asercion->variable}}</h2>
+        @endif  
       	</center>
        
       </div>
-      <form method="post" action="/crearKeyword">
+      <form method="post" action="/crearKeyword" id="formCrearKeyword">
 	      <div class="panel panel-default">
 	      	
 	      		<div class="panel-heading"><strong>Parametros</strong> </div>
 		      	<div class="panel-body">
-		      				{{csrf_field()}}
+		      	 {{csrf_field()}}
               @if(isset($precondicion))
 							<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
               <input type="hidden" name="tipo" value="precondicion">
@@ -120,10 +127,49 @@
               <div class="form-group">
                 <label class="control-label" for="nombre">Nombre *</label>
               
-                <div class="input-group"> 
+                <div class="input-group" id="inputGroupNombre"> 
                   <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-pencil"></span></span>
-                  <input class="form-control" id="nombreInput" name="nombre" placeholder="Nombre del keyword" aria-describedby="basic-addon1" required> 
+                  <input class="form-control" id="nombreInput" oninput="nombreInputFunction();" name="nombre" placeholder="Nombre del keyword" aria-describedby="basic-addon1" required> 
+                  <span class="glyphicon glyphicon-warning-sign form-control-feedback" id="spanWarning" style="display: none"></span>
                 </div> <br>
+                <p class="text-danger" id="textoAlerta" style="display: none"><b>El nombre de keyword ya existe</b> </p>
+              
+
+                <script type="text/javascript">
+                  var request= new XMLHttpRequest();
+                  var form = document.getElementById('formCrearKeyword');
+
+                  function nombreInputFunction(){
+
+                    valor= $('#nombreInput').val();
+                    var formdata = new FormData(form);            
+
+                    request.open('post','/validarNombreKeyword');
+                    request.addEventListener("load",transferComplete);
+                    request.send(formdata);                    
+
+                  }
+
+                  function transferComplete(data){                    
+
+                    if(data.currentTarget.response=='false'){
+                      $('#nombreInput').addClass('has-warning');
+                      $('#inputGroupNombre').addClass('has-warning');
+                      $('#spanWarning').show();
+                      $('#textoAlerta').show();
+                      $('#botonCrearYAsociar').prop( "disabled", true );
+
+                    }else{
+                      $('#nombreInput').removeClass('has-warning');
+                      $('#inputGroupNombre').removeClass('has-warning');
+                      $('#spanWarning').hide();
+                      $('#textoAlerta').hide();
+                      $('#botonCrearYAsociar').prop( "disabled", false );
+                    }                   
+                              
+                   
+                  }
+                </script>
                 
 
                 <label class="control-label " for="argumentos">Argumentos *</label>
@@ -155,7 +201,7 @@
 
 		      	</div>
 		      	<div class="panel-footer">
-		      		<button type="submit" class="btn btn-default btn-lg pull-right" > 
+		      		<button type="submit" class="btn btn-default btn-lg pull-right" id="botonCrearYAsociar" > 
 					    		Crear y Asociar
 					    		<span class="glyphicon glyphicon-floppy-saved"></span> 
 					    	</button>

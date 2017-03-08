@@ -21,8 +21,8 @@ class ModulosController extends Controller
 		if($modulo==null)
 			return redirect('/modulos');
 		$escenarios=$modulo->escenarios()->orderBy('numero')->get();
-		$precondiciones=$modulo->precondiciones()->get();
-		$aserciones=$modulo->aserciones()->get();
+		$precondiciones=$modulo->precondiciones()->orderBy('variable')->get();
+		$aserciones=$modulo->aserciones()->orderBy('variable')->get();
 		
 		return view('modulos.verModulo')->with('modulo',$modulo)->with('escenarios',$escenarios)->with('precondiciones',$precondiciones)->with('aserciones',$aserciones);
 	}

@@ -100,7 +100,7 @@
         </style>
 </head>
 <body>
-<div class="container">
+<div class="">
 	<div class="jumbotron">
 		<center>
 			<h1>MODULO {{$modulo->nombre}}</h1>
@@ -109,17 +109,18 @@
 		
 	</div>
 
-	<div class="container">	
+	<div class="">	
 
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#precondicionesTab">Precondiciones</a></li>
 			<li><a data-toggle="tab" href="#asercionesTab">Aserciones</a></li>
+			<li><a data-toggle="tab" href="#flujosTab">Flujos</a></li>
 			<li><a data-toggle="tab" href="#opcionesTab">Opciones</a></li>
 		</ul>
 
 		<div class="tab-content">
 			<div id="precondicionesTab" class="tab-pane fade in active">
-			<br>
+				<br>
 			
 					
 				<!-- 
@@ -140,7 +141,12 @@
 								<th>Descripción</th>
 								@foreach($escenarios as $escenario)
 
-								<th>Escenario {{$escenario->numero}}</th>
+								<th>
+									<a href="{{url('/escenario',$escenario->id)}}">
+										Escenario {{$escenario->numero}}
+									</a>
+								
+								</th>
 								@endforeach
 							</tr>
 						</thead>
@@ -175,7 +181,7 @@
 
 									<td>{{$precondicion->variable}}</td>
 									<td>
-										<div style="width: 150px; height: 100px; overflow: scroll">
+										<div style="width: 250px; height: 150px; overflow: scroll">
 										 	{{$precondicion->descripcion_formateada}}
 										</div>
 
@@ -234,7 +240,13 @@
 								<th>Descripción</th>
 								@foreach($escenarios as $escenario)
 
-								<th>Escenario {{$escenario->numero}}</th>
+								
+								<th>
+									<a href="{{url('/escenario',$escenario->id)}}">
+										Escenario {{$escenario->numero}}
+									</a>
+								
+								</th>
 								@endforeach
 							</tr>
 						</thead>
@@ -307,14 +319,25 @@
 						  <div class="panel-heading">Configuración</div>
 						  <div class="panel-body">
 						  	
-						    <form action="/eliminarModulo" method="post">
+						    <form action="/eliminarModulo" method="post" id="formEliminar">
 
 						    	{{csrf_field()}}
 						    	<input type="hidden" name="idModulo" value="{{$modulo->id}}">
-						    	<button type="submit" class="btn btn-info" > 
+						    	<button type="submit" id="botonEliminar" class="btn btn-info" > 
 						    		Eliminar Modulo
 						    		<span class="glyphicon glyphicon-trash"></span> 
 						    	</button>
+						    	<script type="text/javascript">
+						    		$( "#botonEliminar" ).click(function( event ) {
+									  event.preventDefault();
+									  if(confirm('¿Esta seguro de las concecuencias que traera esto?'))
+									  	$('#formEliminar').submit();
+									 
+									  
+									  
+									});
+						    		
+						    	</script>
 
 						    	
 						    </form>
@@ -322,7 +345,15 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<div id="flujosTab" class="tab-pane fade">
+
+				hola hola 
+				
 			</div>	
+
+
 		</div>
 
 		<div class="row" style="margin: 10px">

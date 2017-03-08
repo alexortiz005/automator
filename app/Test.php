@@ -2,34 +2,25 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
 
-class Keyword extends Model
+class Test extends Model
 {
-	protected $table = 'keywords';
 
-	public function aserciones(){
+	protected $table = 'tests';	
 
-		return $this->belongsToMany('App\Asercion', 'asercion_keyword');
+	protected $fillable = ['tipo','keyword_id'];
 
-	}
-
-	public function precondiciones(){
-
-		return $this->belongsToMany('App\Precondicion', 'precondicion_keyword');
-
-	}
+	public function keyword(){
+		return $this->BelongsTo('App\Keyword');
+	} 
 
 	public function argumentos(){
 
-		return $this->belongsToMany('App\Argumento', 'keyword_argumento');
+		return $this->belongsToMany('App\Argumento', 'test_argumento');
 
 	}
-
-	public function tests()
-    {
-        return $this->hasMany('App\Test');
-    }
 
 	public function asociarArgumentosDesdeString($stringArgumentos){
 
@@ -39,7 +30,7 @@ class Keyword extends Model
 
 		foreach ($arrayStringArgumentos as $stringArgumento) {		
 			if($stringArgumento!=''){
-				$argumento=Argumento::firstOrCreate(['nombre' => $stringArgumento]);
+				$argumento=Argumento::firstOrCreate(['nombre' => $stringArgumento,'tipo'=>'definido']);
 				$arrayArgumentos[]=$argumento;
 			}			
 		}
@@ -66,37 +57,17 @@ class Keyword extends Model
 
 	}
 
-	public function actualizar($input){
-		$this->nombre=$input['nombre'];
-		$this->source=$input['source'];
-		$this->save();
-	}
-
-	public function tryDelete(){
-
-		if(sizeof($this->aserciones)==0&&sizeof($this->precondiciones)==0){			
-			$this->purge();
-			return true;
-		}
-
-		return false;
-	}
-
 	public function purge(){
 
-		$argumentos=$this->argumentos()->get();
-		
+		$argumentos=$this->argumentos;
 		$this->argumentos()->detach();
-
-		foreach ($this->tests as $test) {
-			$test->purge();
-		}
 
 		foreach ($argumentos as $key => $argumento) {
 			$argumento->tryDelete();
 		}
 
 		$this->delete();
+
 	}
 
 

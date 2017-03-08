@@ -44,36 +44,12 @@ class Modulo extends Model
     //borra el modulo y todas sus variables del sistema
     public function purge(){
 
-        $escenarios=$this->escenarios()->get();
-        $precondiciones=$this->precondiciones()->get();
-        $aserciones=$this->aserciones()->get();
-
-        $this->precondiciones()->detach();
-        $this->aserciones()->detach();
-
+        $escenarios=$this->escenarios;
+        $precondiciones=$this->precondiciones;
+        $aserciones=$this->aserciones;   
+        
         foreach ($escenarios as $key => $escenario) {
-            $escenario->precondiciones()->detach();
-            $escenario->aserciones()->detach();
-            $escenario->delete();
-        }
-
-        foreach ($precondiciones as $key => $precondicion) {
-            try{
-                $precondicion->purge();
-            }catch(Exception $e){
-                continue;
-
-            }
-            
-        }
-
-        foreach ($aserciones as $key => $asercion) {
-            try{
-                $asercion->purge();
-            }catch(Exception $e){
-                continue;
-
-            }
+            $escenario->purge();
         }
 
         $this->delete();

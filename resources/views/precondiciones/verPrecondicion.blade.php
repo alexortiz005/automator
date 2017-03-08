@@ -227,7 +227,7 @@
       						<div class="row" style="overflow: scroll; overflow-y: hidden;">     							
 	      						
 
-	      						@if(sizeof($keywords)==0)
+	      						@if(sizeof($keywords_precondicion)==0)
 
 	      							<div class="col-md-12" style="margin: 10px">
 	      								<p class="text-muted"><i> La precondición no tiene Keywords asociados.</i></p>
@@ -246,7 +246,7 @@
 								      </tr>
 								    </thead>
 								    <tbody>
-								    	@foreach($keywords as $indexKeyword=>$keyword)
+								    	@foreach($keywords_precondicion as $indexKeyword=>$keyword)
 								    		 <tr>
 								    		 	<td>
 								    		 		<a href="{{url('/desasociarKeyword',['precondicion',$keyword->id,$precondicion->id])}}" class="btn btn-default col-md-12" role="button"><span class="glyphicon glyphicon-remove"></span> </a>
@@ -310,27 +310,40 @@
       	<div class="modal-dialog">
 
       		<!-- Modal content-->
-      		<div class="modal-content">
+      		<form method="post" action="/asociarOtrosKeywords">
+	      		<div class="modal-content">
 
-      			<form method="post" action="/asociarKeyword">
+	      			<form method="post" action="/asociarKeyword">
 
-      				<div class="modal-header">
-      					<button type="button" class="close" data-dismiss="modal">&times;</button>
-      					<h4 class="modal-title">Buscar Keyword</h4>
-      				</div>
-      				<div class="modal-body">
-      					<p>Some text in the modal.</p>
-      				</div>
-      				<div class="modal-footer">
-      					<button type="submit" class="btn btn-success " > 
-					    		Asociar
-					    		<span class="glyphicon glyphicon-ok"></span> 
-					    	</button>
-      					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-      				</div>
-      			</form>
+	      				<div class="modal-header">
+	      					<button type="button" class="close" data-dismiss="modal">&times;</button>
+	      					<h4 class="modal-title">Buscar Keyword</h4>
+	      				</div>
+	      				<div class="modal-body">
+	      					{{csrf_field()}}
+	      					<input type="hidden" name="tipo" value="precondicion">
+				      		<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
+	      					<label for="select_keywords">Otros keywords (presione ctrl para seleccionar mas de uno):</label>
+						      <select multiple class="form-control" id="select_keywords" name="otros_keywords[]" size={{$sizeSelectKeywords}}>
+						      	@foreach($keywords as $index=>$keyword)
+						        <option value="{{$keyword->id}}">{{$keyword->nombre}}</option>
+						        @endforeach
 
-      		</div>
+						      </select>
+	      				</div>
+	      				<div class="modal-footer">
+	      					<button type="submit" class="btn btn-success " > 
+						    		Asociar
+						    		<span class="glyphicon glyphicon-ok"></span> 
+						    	</button>
+
+	      					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	      				</div>
+	      			</form>
+
+	      		</div>
+
+      		</form>
 
       	</div>
       </div>

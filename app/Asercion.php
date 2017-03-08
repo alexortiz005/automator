@@ -90,16 +90,25 @@ class Asercion extends Model
         return $max;
     }
 
+    public function tryDelete(){
+        
+        if(sizeof($this->escenarios)==0){
+            $this->purge();
+            return true;
+        }
+
+        return false;
+    }
+
     public function purge(){
 
-        $keywords=$this->keywords()->get();
+        $this->modulos()->detach();
+
+        $keywords=$this->keywords;
         $this->keywords()->detach();
 
         foreach ($keywords as $key => $keyword) {
-            $precondiciones=$keyword->precondiciones()->get();
-            $aserciones=$keyword->aserciones()->get();
-            if(sizeof($precondiciones)==0&&sizeof($aserciones))
-                $keyword->purge();            
+            $keyword->tryDelete();           
         }
 
         $this->delete();

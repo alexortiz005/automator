@@ -2,18 +2,26 @@
 
 namespace App;
 use App\Keyword;
+use App\Test;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Argumento extends Model
 {
 	protected $table = 'argumentos';
+    protected $fillable = ['nombre','tipo'];
 
 	public function keywords(){
 
 		return $this->belongsToMany('App\Keyword', 'keyword_argumento');
 
 	}
+
+    public function tests(){
+
+        return $this->belongsToMany('App\Test', 'test_argumento');
+
+    }
 
 	public function doSingleton(){    
 
@@ -39,6 +47,28 @@ class Argumento extends Model
     	}
 
     	return $nombres_argumentos;
+
+    }
+
+    public static function entregarNombresComoString($parametro_argumentos){
+        
+        $avoid=['${','}'];
+        
+        $parametro_argumentos= str_replace($avoid, "", $parametro_argumentos);
+       
+
+        return $parametro_argumentos;
+
+    }
+
+    public function tryDelete(){
+ 
+        if(sizeof($this->tests)==0&&sizeof($this->keywords)==0){
+              $this->delete();
+              return true;
+        }      
+
+        return false;
 
     }
 
