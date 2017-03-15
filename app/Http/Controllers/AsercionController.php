@@ -15,6 +15,8 @@ class AsercionController extends Controller
 	public function verAsercion($asercionId){
 
 		$asercion=Asercion::find($asercionId);
+		if(is_null($asercion))
+			return redirect('/modulos');
 		$estados=Asercion::estados();	
 		$keywords_asercion=$asercion->keywords()->get();
 		$keywords=Keyword::orderBy('nombre')->get();

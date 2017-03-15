@@ -69,7 +69,7 @@ class Precondicion extends Model
         $this->ruta=$input['ruta'];
         $this->descripcion=$input['descripcion'];
         $this->descripcion_formateada=$input['descripcion_formateada'];
-        $this->save();
+        $this->actualizarEstado();
 
     }
 
@@ -87,11 +87,13 @@ class Precondicion extends Model
     }
 
     public function tryDelete(){
-        
+             
         if(sizeof($this->escenarios)==0){
             $this->purge();
             return true;
         }
+
+        $this->actualizarEstado();
 
         return false;
     }
@@ -117,34 +119,63 @@ class Precondicion extends Model
 
         $escenarios_precondicion_to_merge=$precondicion_to_merge->escenarios;
 
-        $ids=[];   
-        $ids2=[];     
+        $ids=[];      
 
         foreach ($escenarios_precondicion_to_merge as $key => $escenario) {   
             $ids[]=$escenario->id;
         }
 
-        foreach ($this->escenarios as $key => $escenario) {   
-            $ids2[]=$escenario->id;
-        }
-
-        print("ids es ");
-        var_dump($ids);
-        print("<br>");
-        print("ids2 es ");
-        var_dump($ids2);
-        print("<br>");
-
-
-
-        var_dump($this->escenarios()->select(['escenarios.id'])->get()->toArray());
         $this->escenarios()->syncWithoutDetaching($ids);
-        var_dump($this->escenarios()->select(['escenarios.id'])->get()->toArray());
 
         $precondicion_to_merge->escenarios()->detach(); 
 
         $precondicion_to_merge->purge();
 
+        $this->actualizarEstado();
+
+
+    }
+
+    public function actualizarEstado(){
+
+        $keywords=$this->keywords;
+
+        if(sizeof($keywords)==0){
+
+            $this->estado=='sin_asignar';
+         
+        }else{
+
+            $this->estado='disenada';
+
+            foreach ($keywords as $key => $keyword) {
+                if(sizeof($keyword->argumentos)==0)
+                    $this->estado='sin_disenar';
+            }
+
+            if($this->estado=='disenada'){
+
+                $this->estado='testeada';
+
+                foreach ($keywords as $key => $keyword) {
+                    if(sizeof($keyword->tests)==0)
+                        $this->estado='disenada';
+                }
+            }
+
+        }       
+
+        $this->save();
+
+    }
+
+    public static function actualizarEstados(){
+
+        $precondiciones=self::All();
+
+        foreach ($precondiciones as $key => $precondicion) {
+            $precondicion->actualizarEstado();
+        }
 
     }
 

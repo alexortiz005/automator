@@ -110,7 +110,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#parametros"><strong>Parametros</strong></a>
+        <a data-toggle="collapse"  href="#parametros"><strong>Parametros</strong></a>
       </h4>
     </div>
     <div id="parametros" class="panel-collapse collapse ">
@@ -145,7 +145,9 @@
                 <div class="input-group"> 
                   <span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-pencil"></span></span>
                   <input class="form-control"  id="tokenfield" name="argumentos" placeholder="Argumentos" aria-describedby="basic-addon2" required>
-                </div> <br> 
+                </div>
+                <p class="text-info"><strong><small>Debe ingresar al menos un argumento</small> </strong> </p>
+                
 
                 <script type="text/javascript">
 
@@ -154,7 +156,7 @@
 
 
                   $('#tokenfield').tokenfield({
-                    delimiter:' '
+                    delimiter:[' ','|',',']
                   }); 
 
                   $('#tokenfield').tokenfield('setTokens', [
@@ -223,7 +225,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#tests"><strong> Tests</strong> </a>
+        <a data-toggle="collapse"  href="#tests"><strong> Tests</strong> </a>
       </h4>
     </div>
     <div id="tests" class="panel-collapse collapse">
@@ -329,7 +331,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><strong>Opciones</strong> </a>
+        <a data-toggle="collapse"  href="#collapse3"><strong>Opciones</strong> </a>
       </h4>
     </div>
     <div id="collapse3" class="panel-collapse collapse">
@@ -351,8 +353,10 @@
    <div class="col-md-8 col-md-offset-2">
      <center>
       <div class="links">     
-       <a href="{{ url('/') }}">Home</a> 			   
+       <a href="{{ url('/') }}">Home</a> 			  
+       <!-- 
        <a href="{{ url('/upload') }}">Cargar Documentos</a>             
+       --> 
      </div>
 
    </center>

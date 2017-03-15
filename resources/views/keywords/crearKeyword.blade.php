@@ -116,11 +116,11 @@
 		      	<div class="panel-body">
 		      	 {{csrf_field()}}
               @if(isset($precondicion))
-							<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
+							<input type="hidden" name="idObjeto" value="{{$precondicion->id}}">
               <input type="hidden" name="tipo" value="precondicion">
               @endif
               @if(isset($asercion))
-              <input type="hidden" name="idAsercion" value="{{$asercion->id}}">
+              <input type="hidden" name="idObjeto" value="{{$asercion->id}}">
               <input type="hidden" name="tipo" value="asercion">
               @endif
 
@@ -176,12 +176,12 @@
                 
                 <div class="input-group"> 
                   <span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-pencil"></span></span>
-                  <input class="form-control"  id="tokenfield" name="argumentos" placeholder="Argumentos" aria-describedby="basic-addon2" required> 
-                </div> <br> 
-
+                  <input class="form-control"  id="tokenfield" name="argumentos" placeholder="Argumentos" aria-describedby="basic-addon2"> 
+                </div> 
+                
                 <script type="text/javascript">
                   $('#tokenfield').tokenfield({
-                    delimiter:' '
+                    delimiter:[' ','|',',']
                   });                
                 </script>
 
@@ -218,9 +218,11 @@
 			<div class="col-md-8 col-md-offset-2">
 			<center>
 				<div class="links">     
-					<a href="{{ url('/') }}">Home</a> 			   
-			        <a href="{{ url('/upload') }}">Cargar Documentos</a>             
-			    </div>
+					<a href="{{ url('/') }}">Home</a> 		
+          <!-- 
+			    <a href="{{ url('/upload') }}">Cargar Documentos</a>             
+          -->    
+			   </div>
 				
 			</center>
 

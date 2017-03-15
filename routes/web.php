@@ -12,6 +12,8 @@
 */
 
 Route::get('/', function () {
+	App\Precondicion::actualizarEstados();
+	App\Asercion::actualizarEstados();
     return view('welcome');
 });
 
@@ -61,6 +63,7 @@ Route::post('vistaCrearKeyword','KeywordController@vistaCrearKeyword');
 Route::post('validarNombreKeyword','KeywordController@validarNombreKeyword');
 Route::post('editarKeyword','KeywordController@editarKeyword');
 Route::post('crearKeyword','KeywordController@crearKeyword');
+Route::post('obtenerKeywordJSON','KeywordController@obtenerKeywordJSON');
 Route::post('asociarOtrosKeywords','KeywordController@asociarOtrosKeywords');
 Route::get('desasociarKeyword/{tipo}/{idKeyword}/{idPrecondicion}', 'KeywordController@desasociar');
 Route::get('keyword/{idKeyword}', 'KeywordController@verKeyword');

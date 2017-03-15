@@ -10,6 +10,7 @@
         "laravel/tinker": "~1.0",
         "phpoffice/phpword": "^0.13.0",
         "maatwebsite/excel": "~2.1.0",
+        "artisaninweb/laravel-soap": "0.3.*",
         "kartik-v/bootstrap-fileinput": "dev-master"
     },
     "require-dev": {

@@ -119,6 +119,12 @@ class Escenario extends Model
 
     	$this->precondiciones()->detach();
     	$this->aserciones()->detach();
+        $flujo=$this->flujo();
+        $flujo->escenario_id=null;
+        $this->flujo_id=null;
+        $flujo->delete();
+
+
 
     	foreach ($precondiciones as $key => $precondicion) {
     		$precondicion->tryDelete();

@@ -16,6 +16,8 @@ class PrecondicionController extends Controller
 	public function verPrecondicion($precondicionId){
 
 		$precondicion=Precondicion::find($precondicionId);
+		if(is_null($precondicion))
+			return redirect('/modulos');
 		$estados=Precondicion::estados();	
 		$keywords_precondicion=$precondicion->keywords()->get();
 		$keywords=Keyword::orderBy('nombre')->get();

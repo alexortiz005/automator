@@ -68,7 +68,7 @@ class Asercion extends Model
         $this->ruta=$input['ruta'];
         $this->descripcion=$input['descripcion'];
         $this->descripcion_formateada=$input['descripcion_formateada'];
-        $this->save();
+        $this->actualizarEstado();
 
     }
 
@@ -96,6 +96,8 @@ class Asercion extends Model
             $this->purge();
             return true;
         }
+
+        $this->actualizarEstado();
 
         return false;
     }
@@ -132,6 +134,51 @@ class Asercion extends Model
 
         $asercion_to_merge->purge();
 
+        $this->actualizarEstado();
+
+
+    }
+
+    public function actualizarEstado(){
+
+        $keywords=$this->keywords;
+
+        if(sizeof($keywords)==0){
+
+            $this->estado=='sin_asignar';
+         
+        }else{
+
+            $this->estado='disenada';
+
+            foreach ($keywords as $key => $keyword) {
+                if(sizeof($keyword->argumentos)==0)
+                    $this->estado='sin_disenar';
+            }
+
+            if($this->estado=='disenada'){
+
+                $this->estado='testeada';
+
+                foreach ($keywords as $key => $keyword) {
+                    if(sizeof($keyword->tests)==0)
+                        $this->estado='disenada';
+                }
+            }
+
+        }       
+
+        $this->save();
+
+    }
+
+    public static function actualizarEstados(){
+
+        $aserciones=self::All();
+
+        foreach ($aserciones as $key => $asercion) {
+            $asercion->actualizarEstado();
+        }
 
     }
    

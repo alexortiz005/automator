@@ -24,7 +24,9 @@ class Reader extends Model
 
 	public function getTables(){
 
-		$phpWord = \PhpOffice\PhpWord\IOFactory::load($this->file);			
+		$phpWord = \PhpOffice\PhpWord\IOFactory::load($this->file);
+
+		//dd($this->dumpFile());			
 
 		$sections = $phpWord->getSections();
 		$precondicionesIndex= 0;
@@ -85,6 +87,8 @@ class Reader extends Model
 			$innerElements=$element->getElements();
 
 			foreach ($innerElements as $key => $innerElement) {
+				//var_dump('getElements');
+				//var_dump(get_class($element));
 				self::dumpElement($innerElement);		
 			}
 
@@ -97,6 +101,8 @@ class Reader extends Model
 			$innerElements=$element->getRows();
 
 			foreach ($innerElements as $key => $innerElement) {
+				//var_dump('getRows');
+				//var_dump(get_class($element));
 				self::dumpElement($innerElement);		
 			}
 
@@ -109,6 +115,8 @@ class Reader extends Model
 			$innerElements=$element->getCells();
 
 			foreach ($innerElements as $key => $innerElement) {
+				//var_dump('getCells');
+				//var_dump(get_class($element));
 				self::dumpElement($innerElement);		
 			}
 
@@ -195,85 +203,170 @@ class Reader extends Model
 
 	    		$cellCount=0;
 
-	    		foreach ($cells as $cellIndex => $cell) {
+	  	    	foreach ($cells as $cellIndex => $cell) {	    					
 
-	    			$descripcion="";
-	    			$descripcion_formateada="";	    			
+	    			$cellElements=$cell->getElements();	    		    			
 
-	    			$cellElements=$cell->getElements();	    			
+	    			switch ($cellCount) { 	
 
-	    			foreach ($cellElements as $cellElementIndex => $cellElement) {
+	    				case 0:
 
-	    				
+	    					$variable="";
 
-	    				if(method_exists($cellElement,'getText')) {
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
 
-		    				if($cellCount==0)
-		    					$precondicion->variable=$cellElement->getText();
-		    				if($cellCount==1)
-		    					$precondicion->objeto=$cellElement->getText();
-		    				if($cellCount==2)
-		    					$precondicion->ruta=$cellElement->getText();
-				        	
-				        	
-				        }else{
-				        	if(method_exists($cellElement,'getElements')){
+	    						if(method_exists($cellElement,'getText')){
+	    							$variable.=$cellElement->getText();
+	    						}
 
-				        		
+	    						if(method_exists($cellElement,'getElements')){				        		
 
-				        		$innerCellElements=$cellElement->getElements();
+					        		$innerCellElements=$cellElement->getElements();
 
-					        	foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
-					        		if(method_exists($innerCellElement,'getText')) {							        	
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
 
-							        	if($innerCellElement->getText()!=null){
-						    	    		$descripcion=$descripcion.$innerCellElement->getText();
-							        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
-							        		$descripcion_formateada	=$descripcion_formateada."\n";
-
-							        	
-							        	}
-							        	
-							        }
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$variable.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
 					        	}
 
-					        	
+	    					}
 
-				        	}							        	
-				        }
+	    					$precondicion->variable=$variable;
+	    					break;
 
-				        
-	    			}	    			
+	    				case 1:
 
-	    			$precondicion->descripcion=$descripcion;
-	    			$precondicion->descripcion_formateada=$descripcion_formateada;
+	    					$objeto="";
 
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$objeto.=$cellElement->getText();
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$objeto.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+	    					}
+
+	    					$precondicion->objeto=$objeto;
+	    					break;
+
+	    				case 2:
+
+	    					$ruta="";
+
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$ruta.=$cellElement->getText();
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$ruta.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+
+	    					}
+
+	    					$precondicion->ruta=$ruta;
+	    					break;
+
+	    				case 3:
+
+	    					$descripcion="";
+	    					$descripcion_formateada="";	
+
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$descripcion.=$cellElement->getText();
+					        		$descripcion_formateada.=$cellElement->getText();
+					        		$descripcion_formateada.="\n";
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$descripcion=$descripcion.$innerCellElement->getText();
+								        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
+								        		$descripcion_formateada	=$descripcion_formateada."\n";					        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+
+	    					}
+	    					 
+	    					$precondicion->descripcion=$descripcion;
+	    					$precondicion->descripcion_formateada=$descripcion_formateada;
+	    					break;
+	    				
+	    				default:
+	    					# code...
+	    					break;
+	    			}
 
 	    			$cellCount++;
 	    		}
 
-	    		if($precondicion->descripcion!="")
+	    		if($precondicion->descripcion!=""&&$precondicion->variable!="")
 	    			$precondiciones[]=$precondicion;
     		}
 
     		$rowCount++;
-    	}    	
-
-    	
+    	}
 
     	return $precondiciones; 
 			   
 	}
 
-	public function extraerAserciones(){	
+	public function extraerAserciones(){
+
 
 		$aserciones=array();
 
-		$tables=$this->getTables();  
+		$tables=$this->getTables();	 
 
 		if(sizeof($tables)<4)
-			throw new Exception("Error obteniendo tablas en el archivo ".$this->file->getClientOriginalName(), 1);  
-
+			throw new Exception("Error obteniendo tablas en el archivo ".$this->file->getClientOriginalName(), 1);
+			
 		$table=$tables[3];        
 
 		$rows=$table->getRows();
@@ -290,65 +383,145 @@ class Reader extends Model
 
 	    		$cellCount=0;
 
-	    		foreach ($cells as $cellIndex => $cell) {
+	  	    	foreach ($cells as $cellIndex => $cell) {	    					
 
-	    			$descripcion="";
-	    			$descripcion_formateada="";	  
+	    			$cellElements=$cell->getElements();	    		    			
 
+	    			switch ($cellCount) { 	
 
-	    			$cellElements=$cell->getElements();	  
+	    				case 0:
 
+	    					$variable="";
 
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
 
-	    			foreach ($cellElements as $cellElementIndex => $cellElement) {
+	    						if(method_exists($cellElement,'getText')){
+	    							$variable.=$cellElement->getText();
+	    						}
 
-	    					
+	    						if(method_exists($cellElement,'getElements')){				        		
 
-	    				if(method_exists($cellElement,'getText')) {
+					        		$innerCellElements=$cellElement->getElements();
 
-		    				if($cellCount==0)
-		    					$asercion->variable=$cellElement->getText();
-		    				if($cellCount==1)
-		    					$asercion->objeto=$cellElement->getText();
-		    				if($cellCount==2)
-		    					$asercion->ruta=$cellElement->getText();
-				        	
-				        	
-				        }else{
-				        	if(method_exists($cellElement,'getElements')){
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
 
-				        		
-
-				        		$innerCellElements=$cellElement->getElements();
-
-					        	foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
-					        		if(method_exists($innerCellElement,'getText')) {							        	
-
-							        	if($innerCellElement->getText()!=null){
-
-							        		$descripcion=$descripcion.$innerCellElement->getText();
-							        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
-							        		$descripcion_formateada	=$descripcion_formateada."\n";
-
-							        	
-							        	}
-							        	
-							        }
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$variable.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
 					        	}
 
-					        	
+	    					}
 
-				        	}							        	
-				        }
+	    					$asercion->variable=$variable;
+	    					break;
 
-				        
+	    				case 1:
+
+	    					$objeto="";
+
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$objeto.=$cellElement->getText();
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$objeto.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+	    					}
+
+	    					$asercion->objeto=$objeto;
+	    					break;
+
+	    				case 2:
+
+	    					$ruta="";
+
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$ruta.=$cellElement->getText();
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$ruta.=$innerCellElement->getText();				        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+
+	    					}
+
+	    					$asercion->ruta=$ruta;
+	    					break;
+
+	    				case 3:
+
+	    					$descripcion="";
+	    					$descripcion_formateada="";	
+
+	    					foreach ($cellElements as $cellElementIndex => $cellElement) {
+
+	    						if(method_exists($cellElement,'getText')){
+	    							$descripcion.=$cellElement->getText();
+					        		$descripcion_formateada.=$cellElement->getText();
+					        		$descripcion_formateada.="\n";
+	    						}
+
+	    						if(method_exists($cellElement,'getElements')){				        		
+
+					        		$innerCellElements=$cellElement->getElements();
+
+					        		if(sizeof($innerCellElements)==0)
+					        			continue;
+					        		
+									foreach ($innerCellElements as $innerCellElementIndex => $innerCellElement) {
+						        		if(method_exists($innerCellElement,'getText')) {	 
+								        	if($innerCellElement->getText()!=null){
+							    	    		$descripcion=$descripcion.$innerCellElement->getText();
+								        		$descripcion_formateada	=$descripcion_formateada.$innerCellElement->getText();
+								        		$descripcion_formateada	=$descripcion_formateada."\n";					        	
+								        	}							        	
+								        }
+						        	}
+					        	}
+
+	    					}
+	    					 
+	    					$asercion->descripcion=$descripcion;
+	    					$asercion->descripcion_formateada=$descripcion_formateada;
+	    					break;
+	    				
+	    				default:
+	    					# code...
+	    					break;
 	    			}
-
-
-
-	    			$asercion->descripcion=$descripcion;
-	    			$asercion->descripcion_formateada=$descripcion_formateada;
-
 
 	    			$cellCount++;
 	    		}
@@ -358,7 +531,7 @@ class Reader extends Model
     		}
 
     		$rowCount++;
-    	}
+    	}    
 
     	return $aserciones; 
 			   

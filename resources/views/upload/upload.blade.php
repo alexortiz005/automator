@@ -113,6 +113,8 @@
 					var request= new XMLHttpRequest();
 
 					
+
+					
 					form.addEventListener('submit',function(e){
 						$("#successAlert").hide();
 						$("#errorAlert").hide();

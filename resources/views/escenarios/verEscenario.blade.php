@@ -87,7 +87,7 @@
 				</div>
 		<div class="jumbotron">
 			<center>
-				<h2> <a href="{{url('modulo',$modulo->id)}}">MODULO {{$modulo->nombre}}</a></h2>
+				<h2> <a href="{{url('modulo',$modulo_escenario->id)}}">MODULO {{$modulo_escenario->nombre}}</a></h2>
 				<h1>ESCENARIO {{$escenario->numero}}</h1>
 				
 			</center>
@@ -143,7 +143,7 @@
 <textarea class="form-control" rows="5" id="comment">PrecondicionesEscenario Test {{$escenario->numero}}
     [Arguments]@foreach($argumentos_precondiciones as $argumento)    {{'${'.$argumento.'}'}}@endforeach
 
-@foreach($precondiciones_testeadas as $precondicion)
+@foreach($precondiciones_disenadas as $precondicion)
 @foreach($precondicion->keywords as $keyword)
     {{$keyword->nombre}}@foreach($keyword->argumentos as $argumento)    {{'${'.$argumento->nombre.'}'}}@endforeach
 
@@ -156,7 +156,7 @@
 <textarea class="form-control" rows="5" id="comment">AsercionesEscenario Test {{$escenario->numero}}
     [Arguments]@foreach($argumentos_aserciones as $argumento)    {{'${'.$argumento.'}'}}@endforeach
 
-@foreach($aserciones_testeadas as $asercion)
+@foreach($aserciones_disenadas as $asercion)
 @foreach($asercion->keywords as $keyword)
     {{$keyword->nombre}}@foreach($keyword->argumentos as $argumento)    {{'${'.$argumento->nombre.'}'}}@endforeach
 
@@ -235,8 +235,10 @@
 			<div class="col-md-8 col-md-offset-2">
 			<center>
 				<div class="links">     
-					<a href="{{ url('/') }}">Home</a> 			   
+					<a href="{{ url('/') }}">Home</a> 		
+					<!-- 
 			        <a href="{{ url('/upload') }}">Cargar Documentos</a>             
+					-->    	   
 			    </div>
 				
 			</center>

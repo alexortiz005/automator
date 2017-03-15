@@ -222,7 +222,7 @@
       							<strong>Keywords</strong></a>
       					</h4>
       				</div>
-      				<div id="collapse2" class="panel-collapse collapse">
+      				<div id="collapse2" class="panel-collapse collapse in">
       					<div class="panel-body">
       						<div class="row" style="overflow: scroll; overflow-y: hidden;">     							
 	      						
@@ -285,7 +285,7 @@
 	      							<form method="post" action="/vistaCrearKeyword">
 	      								{{csrf_field()}}
 	      								<input type="hidden" name="tipo" value="precondicion">
-				      					<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
+				      					<input type="hidden" name="idObjeto" value="{{$precondicion->id}}">
 			      						<button type="submit" class="btn btn-default btn-sm" > 					    		
 								    		<span class="glyphicon glyphicon-plus"></span> 
 								    	</button>
@@ -322,7 +322,7 @@
 	      				<div class="modal-body">
 	      					{{csrf_field()}}
 	      					<input type="hidden" name="tipo" value="precondicion">
-				      		<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
+				      		<input type="hidden" name="idObjeto" value="{{$precondicion->id}}">
 	      					<label for="select_keywords">Otros keywords (presione ctrl para seleccionar mas de uno):</label>
 						      <select multiple class="form-control" id="select_keywords" name="otros_keywords[]" size={{$sizeSelectKeywords}}>
 						      	@foreach($keywords as $index=>$keyword)
@@ -354,8 +354,10 @@
 			<div class="col-md-8 col-md-offset-2">
 			<center>
 				<div class="links">     
-					<a href="{{ url('/') }}">Home</a> 			   
+					<a href="{{ url('/') }}">Home</a> 	
+					<!-- 
 			        <a href="{{ url('/upload') }}">Cargar Documentos</a>             
+					-->		   
 			    </div>
 				
 			</center>

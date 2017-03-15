@@ -23,13 +23,13 @@ class KeywordController extends Controller
 
 		if($tipo=='precondicion'){
 
-			$precondicion=Precondicion::find($input['idPrecondicion']);
+			$precondicion=Precondicion::find($input['idObjeto']);
 			return view('keywords.crearKeyword',['modulos'=>$modulos,'precondicion'=>$precondicion,'argumentos'=>$argumentos]);
 
 		}
 		if($tipo=='asercion'){
 
-			$asercion=Asercion::find($input['idAsercion']);
+			$asercion=Asercion::find($input['idObjeto']);
 			return view('keywords.crearKeyword',['modulos'=>$modulos,'asercion'=>$asercion,'argumentos'=>$argumentos]);
 
 
@@ -49,22 +49,21 @@ class KeywordController extends Controller
 
 			if($tipo=='precondicion'){
 
-				$precondicion=Precondicion::find($input['idPrecondicion']);
+				$precondicion=Precondicion::find($input['idObjeto']);
 
 				$keyword=new Keyword;
 				$keyword->nombre=$nombre;
 				$keyword->source=$source;
 				$keyword->save();
-				$keyword->asociarArgumentosDesdeString($argumentosString);
+				$keyword->asociarArgumentosDesdeString($argumentosString);				
 				$keyword->precondiciones()->attach($precondicion->id);
 
-				return redirect('/precondicion/'.$precondicion->id);
-
+				$precondicion->actualizarEstado();
 			}
 
 			if($tipo=='asercion'){
 
-				$asercion=Asercion::find($input['idAsercion']);	
+				$asercion=Asercion::find($input['idObjeto']);	
 
 				$keyword=new Keyword;
 				$keyword->nombre=$nombre;
@@ -73,12 +72,11 @@ class KeywordController extends Controller
 				$keyword->asociarArgumentosDesdeString($argumentosString);
 				$keyword->aserciones()->attach($asercion->id);
 
-				return redirect('/asercion/'.$asercion->id);
-
+				$asercion->actualizarEstado();
 
 			}
 
-			return redirect('/modulos');
+			return redirect()->back();
 		
 
 	}
@@ -91,28 +89,32 @@ class KeywordController extends Controller
 
 		if($tipo=='precondicion'){			
 			
-			$precondicion=Precondicion::find($input['idPrecondicion']);
+			$precondicion=Precondicion::find($input['idObjeto']);
 
 			$keywords=$input['otros_keywords'];
 
 			$precondicion->keywords()->sync($keywords,false);
 
-			return redirect('/precondicion/'.$precondicion->id);
+			$precondicion->actualizarEstado();
+
 
 		}
 		if ($tipo=='asercion') {
 
-			$asercion=Asercion::find($input['idAsercion']);
+			$asercion=Asercion::find($input['idObjeto']);
 
 			$keywords=$input['otros_keywords'];
 
 			$asercion->keywords()->sync($keywords,false);
 
-			return redirect('/asercion/'.$asercion->id);
+			$asercion->actualizarEstado();
+
 		
 		}
 
-		return redirect('/modulos');
+		return redirect()->back();
+
+
 
 
 	}
@@ -120,32 +122,30 @@ class KeywordController extends Controller
 	public function desasociar($tipo,$idKeyword,$id){
 
 		if($tipo=='precondicion'){
+
+			$precondicion=Precondicion::find($id);
 			
 			$keyword=Keyword::find($idKeyword);
 
 			$keyword->precondiciones()->detach($id);
 
-			if(sizeof($keyword->precondiciones)==0&&sizeof($keyword->aserciones)==0)
-				$keyword->purge();
-
-			return redirect('/precondicion/'.$id);
+			$precondicion->actualizarEstado();
+			
 
 		}
 		if ($tipo=='asercion') {
+
+			$asercion=Asercion::find($id);
 
 			$keyword=Keyword::find($idKeyword);
 
 			$keyword->aserciones()->detach($id);
 
-			if(sizeof($keyword->precondiciones)==0&&sizeof($keyword->aserciones)==0)
-				$keyword->purge();
-
-
-			return redirect('/asercion/'.$id);
+			$asercion->actualizarEstado();
 		
 		}
 
-		return redirect('/modulos');
+		return redirect()->back();
 		
 
 	}
@@ -153,6 +153,8 @@ class KeywordController extends Controller
 	public function verKeyword($idKeyword){
 
 		$keyword=Keyword::find($idKeyword);
+		if(is_null($keyword))
+			return redirect('/modulos');
 		$modulos=Modulo::All();
 		$argumentosKeyword=$keyword->argumentos()->get();
 		
@@ -168,9 +170,21 @@ class KeywordController extends Controller
 										   ]);
 	}
 
+	public function obtenerKeywordJSON(Request $request){
+
+		$input=$request->all();	
+
+		$keyword=Keyword::find($input['id']);
+		$argumentos=$keyword->argumentos()->get()->toArray();
+		$argumentos=array_pluck($argumentos, 'nombre');
+
+		return response()->json(['keyword'=>$keyword,'argumentos'=>$argumentos]);
+
+
+	}
+
 
 	public function editarKeyword(Request $request){
-
 
 		$input=$request->all();	
 
@@ -180,24 +194,27 @@ class KeywordController extends Controller
 		$keyword->actualizar($input);
 		$keyword->asociarArgumentosDesdeString($argumentosString);
 
-		return redirect('/keyword/'.$keyword->id);
+		foreach ($keyword->aserciones as $key => $asercion) {
+			$asercion->actualizarEstado();
+		}
+
+		foreach ($keyword->precondiciones as $key => $precondicion) {
+			$precondicion->actualizarEstado();
+		}
+
+		return redirect()->back();
 
 	}
 
 	public function validarNombreKeyword(Request $request){
 
-		$input=$request->all();	
-
-		
+		$input=$request->all();			
 
 		$old_keyword=Keyword::where('nombre',$input['nombre'])->first();
 
 		if(is_null($old_keyword))
 			return 'true';
 		return 'false';
-
-	
-
 
 
 	}
