@@ -139,6 +139,229 @@ class Escenario extends Model
 
 
     }
+
+     public function orquestarAserciones(){
+
+
+        $aserciones_testeadas = $this->aserciones()->where('aserciones.estado','testeada')->get();
+        $aserciones_disenadas = $this->aserciones()->where('aserciones.estado','disenada')->get();
+
+
+        $argumentos_aserciones=[];
+
+        foreach ($aserciones_disenadas as $asercion) {
+            $keywords=$asercion->keywords;
+            foreach ($keywords as $keyword) {
+                $argumentos=$keyword->argumentos;
+                foreach ($argumentos as $key => $argumento) {
+                    $argumentos_aserciones[]=$argumento->nombre;
+                    
+                }           
+            }
+        }
+
+        foreach ($aserciones_testeadas as $asercion) {
+            $keywords=$asercion->keywords;
+            foreach ($keywords as $keyword) {
+                $argumentos=$keyword->argumentos;
+                foreach ($argumentos as $key => $argumento) {
+                    $argumentos_aserciones[]=$argumento->nombre;
+                    
+                }           
+            }
+        }
+
+        $argumentos_aserciones=array_unique($argumentos_aserciones); 
+
+        $result="";
+        $result.="AsercionesEscenario Test ".$this->numero;
+        $result.=PHP_EOL;
+
+        $result.="    [Arguments]";
+        foreach ($argumentos_aserciones as $argumento) {
+            $result.='    ${'.$argumento.'}';
+        }
+        $result.=PHP_EOL;
+
+        foreach ($aserciones_testeadas as $asercion) {
+            foreach ($asercion->keywords as $keyword) {
+                $result.='    '.$keyword->nombre;
+                foreach ($keyword->argumentos as $argumento) {
+                    $result.='    ${'.$argumento->nombre.'}';
+                } 
+                $result.=PHP_EOL;                
+            }
+          
+        }
+
+        foreach ($aserciones_disenadas as $asercion) {
+            foreach ($asercion->keywords as $keyword) {
+                $result.='    '.$keyword->nombre;
+                foreach ($keyword->argumentos as $argumento) {
+                    $result.='    ${'.$argumento->nombre.'}';
+                } 
+                $result.=PHP_EOL;                
+            }
+                      
+        }
+
+
+        return $result;
+
+    }
+
+    public function orquestarPrecondiciones(){
+
+
+        $precondiciones_testeadas = $this->precondiciones()->where('precondiciones.estado','testeada')->get();
+        $precondiciones_disenadas = $this->precondiciones()->where('precondiciones.estado','disenada')->get();
+
+
+        $argumentos_precondiciones=[];
+
+        foreach ($precondiciones_disenadas as $precondicion) {
+            $keywords=$precondicion->keywords;
+            foreach ($keywords as $keyword) {
+                $argumentos=$keyword->argumentos;
+                foreach ($argumentos as $key => $argumento) {
+                    $argumentos_precondiciones[]=$argumento->nombre;
+                    
+                }           
+            }
+        }
+
+        foreach ($precondiciones_testeadas as $precondicion) {
+            $keywords=$precondicion->keywords;
+            foreach ($keywords as $keyword) {
+                $argumentos=$keyword->argumentos;
+                foreach ($argumentos as $key => $argumento) {
+                    $argumentos_precondiciones[]=$argumento->nombre;
+                    
+                }           
+            }
+        }
+
+        $argumentos_precondiciones=array_unique($argumentos_precondiciones); 
+
+        $result="";
+        $result.="PrecondicionesEscenario Test ".$this->numero;
+        $result.=PHP_EOL;
+
+        $result.="    [Arguments]";
+        foreach ($argumentos_precondiciones as $argumento) {
+            $result.='    ${'.$argumento.'}';
+        }
+        $result.=PHP_EOL;
+
+        foreach ($precondiciones_testeadas as $precondicion) {
+            foreach ($precondicion->keywords as $keyword) {
+                $result.='    '.$keyword->nombre;
+                foreach ($keyword->argumentos as $argumento) {
+                    $result.='    ${'.$argumento->nombre.'}';
+                } 
+                $result.=PHP_EOL;                
+            }
+         
+        }
+
+        foreach ($precondiciones_disenadas as $precondicion) {
+            foreach ($precondicion->keywords as $keyword) {
+                $result.='    '.$keyword->nombre;
+                foreach ($keyword->argumentos as $argumento) {
+                    $result.='    ${'.$argumento->nombre.'}';
+                }  
+                $result.=PHP_EOL;               
+            }
+     
+
+        }
+
+
+        return $result;
+
+    }
+
+    public function orquestarTestUnitariosAserciones(){
+
+        $aserciones_testeadas = $this->aserciones()->where('aserciones.estado','testeada')->get();
+        $aserciones_disenadas = $this->aserciones()->where('aserciones.estado','disenada')->get();
+
+        $result="";
+
+        foreach($aserciones_testeadas as $asercion){        
+            foreach($asercion->keywords as $keyword){
+                foreach($keyword->tests as $test){
+
+                    $result.=$test->nombre;
+                    $result.=PHP_EOL;
+
+                    if($test->tipo=='exitoso'){
+                        $result.="    \${estatus}=    Run Keyword And Return Status    ".$keyword->nombre;
+                        foreach($test->argumentos as $argumento){    
+                            $result.='    '.$argumento->nombre;
+                        }
+                        $result.=PHP_EOL;                           
+                        $result.="    should be true    '\${estatus}'=='True'";
+                        $result.=PHP_EOL.PHP_EOL;   
+                    }else{
+
+
+                        $result.="    \${estatus}=    Run Keyword And Return Status    ".$keyword->nombre;
+                        foreach($test->argumentos as $argumento){
+                            $result.='    '.$argumento->nombre;
+                        }
+                        $result.=PHP_EOL;                        
+                        $result.= "    should be true    '\${estatus}'=='False'";
+                        $result.=PHP_EOL.PHP_EOL;   
+                    
+                    }
+                }
+            }        
+        }
+
+        return $result;
+    }
+    
+    public function orquestarTestUnitariosPrecondiciones(){
+
+        $precondiciones_testeadas = $this->precondiciones()->where('precondiciones.estado','testeada')->get();
+        $precondiciones_disenadas = $this->precondiciones()->where('precondiciones.estado','disenada')->get();
+
+        $result="";
+
+        foreach($precondiciones_testeadas as $precondicion){        
+            foreach($precondicion->keywords as $keyword){
+                foreach($keyword->tests as $test){
+
+                    $result.=$test->nombre;
+                    $result.=PHP_EOL;
+
+                    if($test->tipo=='exitoso'){
+                        $result.="    \${estatus}=    Run Keyword And Return Status    ".$keyword->nombre;
+                        foreach($test->argumentos as $argumento){    
+                            $result.='    '.$argumento->nombre;
+                        }
+                        $result.=PHP_EOL;                           
+                        $result.="    should be true    '\${estatus}'=='True'";
+                        $result.=PHP_EOL.PHP_EOL;   
+                    }else{
+
+
+                        $result.="    \${estatus}=    Run Keyword And Return Status    ".$keyword->nombre;
+                        foreach($test->argumentos as $argumento){
+                            $result.='    '.$argumento->nombre;
+                        }
+                        $result.=PHP_EOL;                        
+                        $result.= "    should be true    '\${estatus}'=='False'";
+                        $result.=PHP_EOL.PHP_EOL;   
+                    
+                    }
+                }
+            }        
+        }
+
+        return $result;
+    }
 	
 
     //

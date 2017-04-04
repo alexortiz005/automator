@@ -6,9 +6,41 @@ use Illuminate\Http\Request;
 
 use App\Escenario;
 use App\Modulo;
+use App\Precondicion;
+use App\Asercion;
 
 class EscenarioController extends Controller
 {
+
+	public function toggleAsociacion(Request $request)
+	{
+
+		$input=$request->all();
+		$tipo=$input['tipo'];
+		$id=$input['idObjeto'];
+		$escenario= Escenario::find($input['idEscenario']);
+		$output=[];
+		$output['paintCell']=false;
+
+
+		if($tipo=='precondicion'){
+			$precondicion=Precondicion::find($id);
+			$escenario->precondiciones()->toggle([$id]);
+			if($escenario->esMiPrecondicion($precondicion))
+				$output['paintCell']=true;
+
+
+		}
+		if($tipo=='asercion'){
+			$asercion=Asercion::find($id);
+			$escenario->aserciones()->toggle([$id]);
+			if($escenario->esMiAsercion($asercion))
+				$output['paintCell']=true;
+			
+		}
+
+		return response()->json($output);
+	}
 
 	public function verEscenario($id){
 
@@ -20,7 +52,7 @@ class EscenarioController extends Controller
 		$precondiciones_disenadas = $escenario->precondiciones()->where('precondiciones.estado','disenada')->get();		
 		$aserciones_testeadas = $escenario->aserciones()->where('aserciones.estado','testeada')->get();
 		$aserciones_disenadas = $escenario->aserciones()->where('aserciones.estado','disenada')->get();
-		$keywords_precondiciones=[];
+
 
 		$argumentos_precondiciones=[];
 		$argumentos_aserciones=[];

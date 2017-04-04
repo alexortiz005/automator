@@ -1,0 +1,116 @@
+.table tbody tr > td.success {
+  background-color: #ffc34d !important;
+}
+
+.table tbody tr > td.error {
+  background-color: #f2dede !important;
+}
+
+.table tbody tr > td.warning {
+  background-color: #fcf8e3 !important;
+}
+
+.table tbody tr > td.info {
+  background-color: #d9edf7 !important;
+}
+
+.table tbody tr > td.danger {
+  background-color: #d9edf7 !important;
+}
+
+.table > thead > tr > td.sin_asignar,
+.table > tbody > tr > td.sin_asignar,
+.table > tfoot > tr > td.sin_asignar,
+.table > thead > tr > th.sin_asignar,
+.table > tbody > tr > th.sin_asignar,
+.table > tfoot > tr > th.sin_asignar,
+.table > thead > tr.sin_asignar > td,
+.table > tbody > tr.sin_asignar > td,
+.table > tfoot > tr.sin_asignar > td,
+.table > thead > tr.sin_asignar > th,
+.table > tbody > tr.sin_asignar > th,
+.table > tfoot > tr.sin_asignar > th {
+  background-color: #b1b1b1;
+}
+
+.table > thead > tr > td.sin_disenar,
+.table > tbody > tr > td.sin_disenar,
+.table > tfoot > tr > td.sin_disenar,
+.table > thead > tr > th.sin_disenar,
+.table > tbody > tr > th.sin_disenar,
+.table > tfoot > tr > th.sin_disenar,
+.table > thead > tr.sin_disenar > td,
+.table > tbody > tr.sin_disenar > td,
+.table > tfoot > tr.sin_disenar > td,
+.table > thead > tr.sin_disenar > th,
+.table > tbody > tr.sin_disenar > th,
+.table > tfoot > tr.sin_disenar > th {
+  background-color: #99ecff;
+}
+
+.table > thead > tr > td.disenada,
+.table > tbody > tr > td.disenada,
+.table > tfoot > tr > td.disenada,
+.table > thead > tr > th.disenada,
+.table > tbody > tr > th.disenada,
+.table > tfoot > tr > th.disenada,
+.table > thead > tr.disenada > td,
+.table > tbody > tr.disenada > td,
+.table > tfoot > tr.disenada > td,
+.table > thead > tr.disenada > th,
+.table > tbody > tr.disenada > th,
+.table > tfoot > tr.disenada > th {
+  background-color: #e6ffcc;
+}
+
+
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
+    height: 100vh;
+    margin: 0;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.content {
+    text-align: center;
+}
+
+.title {
+    font-size: 84px;
+}
+
+.links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}

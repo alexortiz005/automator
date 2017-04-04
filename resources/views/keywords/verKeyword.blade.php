@@ -113,7 +113,7 @@
         <a data-toggle="collapse"  href="#parametros"><strong>Parametros</strong></a>
       </h4>
     </div>
-    <div id="parametros" class="panel-collapse collapse ">
+    <div id="parametros" class="panel-collapse collapse in">
       <form method="post" action="/editarKeyword" id="formEditarKeyword">
         <div class="panel-body">
           {{csrf_field()}}  
@@ -228,7 +228,7 @@
         <a data-toggle="collapse"  href="#tests"><strong> Tests</strong> </a>
       </h4>
     </div>
-    <div id="tests" class="panel-collapse collapse">
+    <div id="tests" class="panel-collapse collapse  in">
 
 
       <div class="panel-body">

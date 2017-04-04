@@ -20,18 +20,21 @@ class TestsController extends Controller
 		$testExitoso->nombre=$keyword->nombre.'Exitoso';			
 		
 		$testExitoso->save();
+		$testExitoso->asociarArgumentosDesdeString("");
 		$testExitoso->asociarArgumentosDesdeString($input['exitoso']);
 
 		$testErrado = Test::firstOrNew(['tipo' => 'errado','keyword_id'=>$input['idKeyword']]);		
 		$testErrado->nombre=$keyword->nombre.'Errado';		
 		
 		$testErrado->save();
+		$testErrado->asociarArgumentosDesdeString("");
 		$testErrado->asociarArgumentosDesdeString($input['errado']);
 
 		$testInexistente = Test::firstOrNew(['tipo' => 'inexistente','keyword_id'=>$input['idKeyword']]);
 		$testInexistente->nombre=$keyword->nombre.'Inexistente';	
 		
 		$testInexistente->save();
+		$testInexistente->asociarArgumentosDesdeString("");
 		$testInexistente->asociarArgumentosDesdeString($input['inexistente']);
 
 		return redirect()->back();

@@ -23,12 +23,6 @@ class Argumento extends Model
 
     }
 
-    public function flujos(){
-
-        return $this->belongsToMany('App\Flujo', 'flujo_argumento');
-
-    }
-
 	public function doSingleton(){    
 
 

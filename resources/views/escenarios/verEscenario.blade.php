@@ -140,29 +140,11 @@
 							<div class="form-group col-md-12">
 								<label for="comment">Precondiciones</label>
 
-<textarea class="form-control" rows="5" id="comment">PrecondicionesEscenario Test {{$escenario->numero}}
-    [Arguments]@foreach($argumentos_precondiciones as $argumento)    {{'${'.$argumento.'}'}}@endforeach
-
-@foreach($precondiciones_disenadas as $precondicion)
-@foreach($precondicion->keywords as $keyword)
-    {{$keyword->nombre}}@foreach($keyword->argumentos as $argumento)    {{'${'.$argumento->nombre.'}'}}@endforeach
-
-@endforeach
-@endforeach
-</textarea>
+<textarea class="form-control" rows="5" id="comment">{{$escenario->orquestarPrecondiciones()}}</textarea>
 <br>
 
 								<label for="comment">Aserciones</label>
-<textarea class="form-control" rows="5" id="comment">AsercionesEscenario Test {{$escenario->numero}}
-    [Arguments]@foreach($argumentos_aserciones as $argumento)    {{'${'.$argumento.'}'}}@endforeach
-
-@foreach($aserciones_disenadas as $asercion)
-@foreach($asercion->keywords as $keyword)
-    {{$keyword->nombre}}@foreach($keyword->argumentos as $argumento)    {{'${'.$argumento->nombre.'}'}}@endforeach
-
-@endforeach
-@endforeach
-</textarea>
+<textarea class="form-control" rows="5" id="comment">{{$escenario->orquestarAserciones()}}</textarea>
 <br>
 
 								<label for="comment">Tests Unitarios Precondiciones</label>

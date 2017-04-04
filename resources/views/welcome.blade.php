@@ -89,7 +89,9 @@
                     <!--
                     <a href="{{ url('/upload') }}">Cargar Documentos Escenarios</a>
                      -->
-                    <a href="{{ url('/modulos') }}">Modulos</a>                    
+                    <a href="{{ url('/modulos') }}">Modulos</a>      
+                    <a href="{{ url('/protokeywords') }}">Banco de Keywords Construidos</a> 
+                    <a href="{{ url('/argumentos') }}">Banco de Argumentos</a>                    
                 </div>
             </div>
         </div>

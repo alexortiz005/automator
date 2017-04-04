@@ -61,7 +61,7 @@
 </head>
 <body>
 
-<div class="container col-md-8 col-md-offset-2">
+<div class="container col-md-10 col-md-offset-1">
       <div class="header clearfix">
       	<div class="row">
       		<div class="col-md-3">
@@ -302,6 +302,39 @@
       					</div>
       				</div>
       			</div>
+
+      			<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+								<strong>Opciones</strong>
+							</a>
+						</h4>
+					</div>
+					<div id="collapse3" class="panel-collapse collapse">
+						<div class="panel-body">
+							<form action="/eliminarPrecondicion" method="post" id="formEliminarPrecondicion">
+
+						    	{{csrf_field()}}
+						    	<input type="hidden" name="idPrecondicion" value="{{$precondicion->id}}">
+						    	<button type="submit" id="botonEliminarPrecondicion" class="btn btn-danger"  > 
+						    		Eliminar precondicion
+						    		<span class="glyphicon glyphicon-trash"></span> 
+						    	</button>
+						    	<script type="text/javascript">
+						    		$( "#botonEliminarPrecondicion" ).click(function( event ) {
+									  event.preventDefault();
+									  if(confirm('¿Esta seguro de las concecuencias que traera esto?'))
+									  	$('#formEliminarPrecondicion').submit();	
+									  
+									});
+						    		
+						    	</script>
+						    	
+						    </form>
+						</div>
+					</div>
+				</div>
       					
       		</div>
       <!-- Modal -->

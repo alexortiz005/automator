@@ -37,6 +37,10 @@ Route::get('modulo/{moduloId}','ModulosController@verModulo');
 
 Route::post('eliminarModulo','ModulosController@eliminar');
 
+Route::post('asociarObjeto','ModulosController@asociarObjeto');
+
+Route::post('crearObjeto','ModulosController@crearObjeto');
+
 //Precondiciones
 
 Route::get('precondicion/{precondicionId}','PrecondicionController@verPrecondicion');
@@ -53,6 +57,11 @@ Route::post('editarAsercion','AsercionController@editar');
 
 Route::post('mergeAserciones','AsercionController@merge');
 
+//Argumentos
+
+Route::get('argumentos','ArgumentoController@vistaArgumentos');
+Route::post('unificarArgumentos','ArgumentoController@unificarArgumentos');
+
 //Flujos
 
 Route::post('editarFlujo','FlujosController@editar');
@@ -68,10 +77,14 @@ Route::post('asociarOtrosKeywords','KeywordController@asociarOtrosKeywords');
 Route::get('desasociarKeyword/{tipo}/{idKeyword}/{idPrecondicion}', 'KeywordController@desasociar');
 Route::get('keyword/{idKeyword}', 'KeywordController@verKeyword');
 
+//Protokeywords
+
+Route::get('protokeywords', 'ProtokeywordController@vistaProtokeywords');
+
 //Escenarios
 
 Route::get('escenario/{idEscenario}', 'EscenarioController@verEscenario');
-
+Route::post('toggleAsociacion', 'EscenarioController@toggleAsociacion');
 //Tests
 
 Route::post('editarTests','TestsController@editarTests');

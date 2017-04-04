@@ -88,9 +88,159 @@ class Modulo extends Model
 
     }
 
-    
-    //FUNCIONES DEPRECADAS, PUES AHORA LA RELACION DEL MODULO CON LAS PRECONDICIONES ES DIRECTA
+    public function flujos(){
+        $flujos=[];
+        $escenarios=$this->escenarios;
+        foreach ($escenarios as $key => $escenario) {
+            if(!is_null($escenario->flujo))
+                $flujos[]=$escenario->flujo;
+        }
+        return $flujos;
+    }
 
+    public function testsPrecondiciones(){
+
+        $tests=[];
+
+        $precondiciones_testeadas = $this->precondiciones()->where('precondiciones.estado','testeada')->get();
+
+        foreach ($precondiciones_testeadas as $precondicion) {
+            foreach ($precondicion->keywords as $keyword) {
+                foreach ($keyword->tests as $test) {
+                    if(sizeof($test->argumentos)>0)
+                        $tests[]=$test;
+                }
+            }
+        }
+
+        return $tests;
+      
+    }
+
+    public function testsAserciones(){
+
+        $tests=[];
+
+        $aserciones_testeadas = $this->aserciones()->where('aserciones.estado','testeada')->get();
+
+        foreach ($aserciones_testeadas as $asercion) {
+            foreach ($asercion->keywords as $keyword) {
+                foreach ($keyword->tests as $test) {
+                    if(sizeof($test->argumentos)>0)
+                        $tests[]=$test;
+                }
+            }
+        }
+
+        return $tests;
+      
+    }
+
+    public function infoPrecondiciones()
+    {
+        $result="";
+        $precondiciones_testeadas=$this->precondiciones()->where('precondiciones.estado','testeada')->get();
+        $precondiciones_disenadas=$this->precondiciones()->where('precondiciones.estado','disenada')->get();
+        $precondiciones_sin_asignar=$this->precondiciones()->where('precondiciones.estado','sin_asignar')->get();
+        $precondiciones_sin_disenar=$this->precondiciones()->where('precondiciones.estado','sin_disenar')->get();
+        $result.='Testeadas: '.sizeof($precondiciones_testeadas);
+        $result.=PHP_EOL;
+        $result.='Diseñadas: '.sizeof($precondiciones_disenadas);
+        $result.=PHP_EOL;
+        $result.='Sin asignar: '.sizeof($precondiciones_sin_asignar);
+        $result.=PHP_EOL;
+        $result.='Sin diseñar: '.sizeof($precondiciones_sin_disenar);
+        $result.=PHP_EOL;
+
+        return $result;
+
+    }
+
+    public function infoAserciones()
+    {
+        $result="";
+        $aserciones_testeadas=$this->aserciones()->where('aserciones.estado','testeada')->get();
+        $aserciones_disenadas=$this->aserciones()->where('aserciones.estado','disenada')->get();
+        $aserciones_sin_asignar=$this->aserciones()->where('aserciones.estado','sin_asignar')->get();
+        $aserciones_sin_disenar=$this->aserciones()->where('aserciones.estado','sin_disenar')->get();
+        $result.='Testeadas: '.sizeof($aserciones_testeadas);
+        $result.=PHP_EOL;
+        $result.='Diseñadas: '.sizeof($aserciones_disenadas);
+        $result.=PHP_EOL;
+        $result.='Sin asignar: '.sizeof($aserciones_sin_asignar);
+        $result.=PHP_EOL;
+        $result.='Sin diseñar: '.sizeof($aserciones_sin_disenar);
+        $result.=PHP_EOL;
+
+        return $result;
+
+    }
+
+    public function formatedTestPrecondiciones(){
+        $tests=$this->testsPrecondiciones();
+        $result="";
+
+        foreach ($tests as $key => $test) {
+            $result.=$test->nombre;
+            $result.=PHP_EOL;
+
+            if($test->tipo=='exitoso'){
+                $result.="    \${estatus}=    Run Keyword And Return Status    ".$test->keyword->nombre;
+                foreach($test->argumentos as $argumento) {
+                    $result.="    ".$argumento->nombre;
+                }
+                $result.=PHP_EOL;
+                $result.="    should be true    '\${estatus}'=='True'";
+
+            }else{
+                $result.="    \${estatus}=    Run Keyword And Return Status    ".$test->keyword->nombre;
+                foreach($test->argumentos as $argumento) {
+                    $result.="    ".$argumento->nombre;
+                }
+                $result.=PHP_EOL;
+                $result.="    should be true    '\${estatus}'=='False'";
+            }
+            $result.=PHP_EOL;    
+            $result.=PHP_EOL;               
+        
+        }
+
+        return $result;
+    }
+
+     public function formatedTestAserciones(){
+        $tests=$this->testsAserciones();
+        $result="";
+
+        foreach ($tests as $key => $test) {
+            $result.=$test->nombre;
+            $result.=PHP_EOL;
+
+            if($test->tipo=='exitoso'){
+                $result.="    \${estatus}=    Run Keyword And Return Status    ".$test->keyword->nombre;
+                foreach($test->argumentos as $argumento) {
+                    $result.="    ".$argumento->nombre;
+                }
+                $result.=PHP_EOL;
+                $result.="    should be true    '\${estatus}'=='True'";
+
+            }else{
+                $result.="    \${estatus}=    Run Keyword And Return Status    ".$test->keyword->nombre;
+                foreach($test->argumentos as $argumento) {
+                    $result.="    ".$argumento->nombre;
+                }
+                $result.=PHP_EOL;
+                $result.="    should be true    '\${estatus}'=='False'";
+            }
+            $result.=PHP_EOL;    
+            $result.=PHP_EOL;               
+        
+        }
+
+        return $result;
+    }
+
+    
     public function precondicionesDeMisEscenarios(){
 
         $escenarios=$this->escenarios()->get();       
@@ -138,5 +288,6 @@ class Modulo extends Model
         }      
         return $aserciones;
     }
+    
     
 }

@@ -8,7 +8,7 @@ class Precondicion extends Model
 {
 
 	protected $table = 'precondiciones';	
-    protected $fillable = ['name','variable','ruta','objeto','ruta','descripcion','descripcion_formateada'];
+    protected $fillable = ['variable','ruta','objeto','ruta','descripcion','descripcion_formateada'];
 
     protected static $estados=['sin_asignar'=>"Sin Asignar",'sin_disenar'=>"Sin Diseñar",'disenada'=>"Diseñada",'testeada'=>"Testeada"];
 

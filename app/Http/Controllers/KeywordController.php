@@ -55,6 +55,7 @@ class KeywordController extends Controller
 				$keyword->nombre=$nombre;
 				$keyword->source=$source;
 				$keyword->save();
+				$keyword->asociarArgumentosDesdeString("");
 				$keyword->asociarArgumentosDesdeString($argumentosString);				
 				$keyword->precondiciones()->attach($precondicion->id);
 
@@ -69,6 +70,7 @@ class KeywordController extends Controller
 				$keyword->nombre=$nombre;
 				$keyword->source=$source;
 				$keyword->save();
+				$keyword->asociarArgumentosDesdeString("");
 				$keyword->asociarArgumentosDesdeString($argumentosString);
 				$keyword->aserciones()->attach($asercion->id);
 
@@ -192,6 +194,7 @@ class KeywordController extends Controller
 		$argumentosString=Argumento::entregarNombresComoString($input['argumentos']);
 
 		$keyword->actualizar($input);
+		$keyword->asociarArgumentosDesdeString("");
 		$keyword->asociarArgumentosDesdeString($argumentosString);
 
 		foreach ($keyword->aserciones as $key => $asercion) {

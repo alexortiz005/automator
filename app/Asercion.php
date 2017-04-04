@@ -10,6 +10,8 @@ class Asercion extends Model
 	protected $table = 'aserciones';	
 
     protected static $estados=['sin_asignar'=>"Sin Asignar",'sin_disenar'=>"Sin Diseñar",'disenada'=>"Diseñada",'testeada'=>"Testeada"];
+    
+    protected $fillable = ['variable','ruta','objeto','ruta','descripcion','descripcion_formateada'];
 
     public function escenarios(){
 

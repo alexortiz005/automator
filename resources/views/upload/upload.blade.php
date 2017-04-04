@@ -113,19 +113,22 @@
 					var request= new XMLHttpRequest();
 
 					
+					debug=false;
 
+					if(!debug){
+						form.addEventListener('submit',function(e){
+							$("#successAlert").hide();
+							$("#errorAlert").hide();
+							e.preventDefault();
+							var formdata = new FormData(form);
+
+							request.open('post','/subir');
+							request.addEventListener("load",transferComplete);
+							request.send(formdata);
+
+						});
+					}					
 					
-					form.addEventListener('submit',function(e){
-						$("#successAlert").hide();
-						$("#errorAlert").hide();
-						e.preventDefault();
-						var formdata = new FormData(form);
-
-						request.open('post','/subir');
-						request.addEventListener("load",transferComplete);
-						request.send(formdata);
-
-					});
 
 					function transferComplete(data){
 
